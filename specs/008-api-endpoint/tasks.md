@@ -21,10 +21,10 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Update existing Pydantic models to match API contract
 
-- [ ] T001 Update ChatResponse model in app/models/schemas.py to rename field `agent` to `current_agent`
-- [ ] T002 Add `is_authenticated: bool` field to ChatResponse model in app/models/schemas.py
-- [ ] T003 Add `conversation_ended: bool` field to ChatResponse model in app/models/schemas.py
-- [ ] T004 Update ChatResponse docstring and field descriptions in app/models/schemas.py
+- [X] T001 Update ChatResponse model in app/models/schemas.py to rename field `agent` to `current_agent`
+- [X] T002 Add `is_authenticated: bool` field to ChatResponse model in app/models/schemas.py
+- [X] T003 Add `conversation_ended: bool` field to ChatResponse model in app/models/schemas.py
+- [X] T004 Update ChatResponse docstring and field descriptions in app/models/schemas.py
 
 **Checkpoint**: ChatResponse model has all 5 required fields (session_id, response, current_agent, is_authenticated, conversation_ended) and imports without errors
 
@@ -34,9 +34,9 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Create the API module directory structure per constitution
 
-- [ ] T005 Create app/api/ directory with app/api/__init__.py
-- [ ] T006 Create app/api/v1/ directory with app/api/v1/__init__.py
-- [ ] T007 Create app/api/v1/endpoints/ directory with app/api/v1/endpoints/__init__.py
+- [X] T005 Create app/api/ directory with app/api/__init__.py
+- [X] T006 Create app/api/v1/ directory with app/api/v1/__init__.py
+- [X] T007 Create app/api/v1/endpoints/ directory with app/api/v1/endpoints/__init__.py
 
 **Checkpoint**: API module structure exists and can be imported, follows constitution Section 4
 
@@ -46,21 +46,21 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Implement the POST /chat endpoint with session management
 
-- [ ] T008 Create app/api/v1/endpoints/chat.py with module imports (APIRouter, HTTPException, HumanMessage, AIMessage, logging)
-- [ ] T009 Add imports for ChatRequest, ChatResponse from app.models.schemas in app/api/v1/endpoints/chat.py
-- [ ] T010 Add imports for GraphState from app.graph.state and graph from app.graph.pipeline in app/api/v1/endpoints/chat.py
-- [ ] T011 Define module-level SESSION_STORE: dict[str, GraphState] = {} in app/api/v1/endpoints/chat.py
-- [ ] T012 Instantiate router = APIRouter() in app/api/v1/endpoints/chat.py
-- [ ] T013 Implement create_initial_state(session_id: str) -> GraphState function in app/api/v1/endpoints/chat.py
-- [ ] T014 Implement async chat_endpoint(request: ChatRequest) -> ChatResponse function with @router.post("/chat") decorator in app/api/v1/endpoints/chat.py
-- [ ] T015 Add session loading/creation logic (check SESSION_STORE, create if missing) in chat_endpoint
-- [ ] T016 Add conversation_ended guard (return termination message without invoking graph) in chat_endpoint
-- [ ] T017 Add message appending logic (append HumanMessage to state["messages"]) in chat_endpoint
-- [ ] T018 Add graph invocation with try-except (await graph.ainvoke(state), raise HTTPException on error) in chat_endpoint
-- [ ] T019 Add state saving logic (store updated state in SESSION_STORE) in chat_endpoint
-- [ ] T020 Add response extraction logic (get last AIMessage with validation, build ChatResponse, raise HTTPException if not AIMessage) in chat_endpoint
-- [ ] T021 Add error logging for graph failures and invalid message types in chat_endpoint
-- [ ] T022 Add Google Style docstrings to all functions in app/api/v1/endpoints/chat.py
+- [X] T008 Create app/api/v1/endpoints/chat.py with module imports (APIRouter, HTTPException, HumanMessage, AIMessage, logging)
+- [X] T009 Add imports for ChatRequest, ChatResponse from app.models.schemas in app/api/v1/endpoints/chat.py
+- [X] T010 Add imports for State from app.graph.state and graph from app.graph.pipeline in app/api/v1/endpoints/chat.py
+- [X] T011 Define module-level SESSION_STORE: dict[str, State] = {} in app/api/v1/endpoints/chat.py
+- [X] T012 Instantiate router = APIRouter() in app/api/v1/endpoints/chat.py
+- [X] T013 Implement create_initial_state(session_id: str) -> State function in app/api/v1/endpoints/chat.py
+- [X] T014 Implement async chat_endpoint(request: ChatRequest) -> ChatResponse function with @router.post("/chat") decorator in app/api/v1/endpoints/chat.py
+- [X] T015 Add session loading/creation logic (check SESSION_STORE, create if missing) in chat_endpoint
+- [X] T016 Add conversation_ended guard (return termination message without invoking graph) in chat_endpoint
+- [X] T017 Add message appending logic (append HumanMessage to state["messages"]) in chat_endpoint
+- [X] T018 Add graph invocation with try-except (await graph.ainvoke(state), raise HTTPException on error) in chat_endpoint
+- [X] T019 Add state saving logic (store updated state in SESSION_STORE) in chat_endpoint
+- [X] T020 Add response extraction logic (get last AIMessage with validation, build ChatResponse, raise HTTPException if not AIMessage) in chat_endpoint
+- [X] T021 Add error logging for graph failures and invalid message types in chat_endpoint
+- [X] T022 Add Google Style docstrings to all functions in app/api/v1/endpoints/chat.py
 
 **Checkpoint**: Chat router exports router with POST /chat endpoint, session management works, graph invocation wrapped in error handling
 
@@ -70,13 +70,13 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Create the FastAPI app and wire up routers
 
-- [ ] T023 Create app/main.py with FastAPI import
-- [ ] T024 Import chat router from app.api.v1.endpoints.chat in app/main.py
-- [ ] T025 Create FastAPI app instance with title="DEUS Bank AI Support" and version="1.0.0" in app/main.py
-- [ ] T026 Include chat router with app.include_router(router, prefix="", tags=["chat"]) in app/main.py
-- [ ] T027 [P] Implement GET /health endpoint that returns {"status": "ok"} in app/main.py
-- [ ] T028 [P] Add if __name__ == "__main__": block with uvicorn.run() for local development in app/main.py
-- [ ] T029 [P] Add module docstring and Google Style docstrings to app/main.py
+- [X] T023 Create app/main.py with FastAPI import
+- [X] T024 Import chat router from app.api.v1.endpoints.chat in app/main.py
+- [X] T025 Create FastAPI app instance with title="DEUS Bank AI Support" and version="1.0.0" in app/main.py
+- [X] T026 Include chat router with app.include_router(router, prefix="", tags=["chat"]) in app/main.py
+- [X] T027 [P] Implement GET /health endpoint that returns {"status": "ok"} in app/main.py
+- [X] T028 [P] Add if __name__ == "__main__": block with uvicorn.run() for local development in app/main.py
+- [X] T029 [P] Add module docstring and Google Style docstrings to app/main.py
 
 **Checkpoint**: Running `uvicorn app.main:app` starts the server, GET /health returns 200, POST /chat is accessible
 
@@ -86,21 +86,21 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Verify endpoint behavior with mocked graph
 
-- [ ] T030 Create tests/test_api.py with imports (TestClient, AsyncMock, pytest, time)
-- [ ] T031 Add fixture for TestClient(app) in tests/test_api.py
-- [ ] T032 Add autouse fixture to clear SESSION_STORE before/after each test in tests/test_api.py
-- [ ] T033 [P] Write test_health_check() to verify GET /health returns 200 and {"status": "ok"} in tests/test_api.py
-- [ ] T034 [P] Write test_new_session() to verify POST /chat creates new session with default state in tests/test_api.py
-- [ ] T035 [P] Write test_existing_session() to verify POST /chat reuses and updates existing session in tests/test_api.py
-- [ ] T036 [P] Write test_ended_conversation() to verify endpoint returns termination message without invoking graph in tests/test_api.py
-- [ ] T037 [P] Write test_validation_error_empty_message() to verify empty message returns 422 in tests/test_api.py
-- [ ] T038 [P] Write test_validation_error_missing_field() to verify missing field returns 422 in tests/test_api.py
-- [ ] T039 [P] Write test_graph_invocation_error() to verify graph errors return 500 with generic message in tests/test_api.py
-- [ ] T040 [P] Write test_invalid_message_type() to verify non-AIMessage last message returns 500 in tests/test_api.py
-- [ ] T041 [P] Write test_response_structure() to verify ChatResponse contains all required fields in tests/test_api.py
-- [ ] T042 [P] Write test_session_state_persistence() to verify state persists across multiple requests in tests/test_api.py
-- [ ] T043 [P] Write test_message_history_accumulation() to verify messages list grows with each turn in tests/test_api.py
-- [ ] T044 [P] Write test_response_performance() to verify response time <5 seconds with mocked graph in tests/test_api.py
+- [X] T030 Create tests/test_api.py with imports (TestClient, AsyncMock, pytest, time)
+- [X] T031 Add fixture for TestClient(app) in tests/test_api.py
+- [X] T032 Add autouse fixture to clear SESSION_STORE before/after each test in tests/test_api.py
+- [X] T033 [P] Write test_health_check() to verify GET /health returns 200 and {"status": "ok"} in tests/test_api.py
+- [X] T034 [P] Write test_new_session() to verify POST /chat creates new session with default state in tests/test_api.py
+- [X] T035 [P] Write test_existing_session() to verify POST /chat reuses and updates existing session in tests/test_api.py
+- [X] T036 [P] Write test_ended_conversation() to verify endpoint returns termination message without invoking graph in tests/test_api.py
+- [X] T037 [P] Write test_validation_error_empty_message() to verify empty message returns 422 in tests/test_api.py
+- [X] T038 [P] Write test_validation_error_missing_field() to verify missing field returns 422 in tests/test_api.py
+- [X] T039 [P] Write test_graph_invocation_error() to verify graph errors return 500 with generic message in tests/test_api.py
+- [X] T040 [P] Write test_invalid_message_type() to verify non-AIMessage last message returns 500 in tests/test_api.py
+- [X] T041 [P] Write test_response_structure() to verify ChatResponse contains all required fields in tests/test_api.py
+- [X] T042 [P] Write test_session_state_persistence() to verify state persists across multiple requests in tests/test_api.py
+- [X] T043 [P] Write test_message_history_accumulation() to verify messages list grows with each turn in tests/test_api.py
+- [X] T044 [P] Write test_response_performance() to verify response time <5 seconds with mocked graph in tests/test_api.py
 
 **Checkpoint**: All API tests pass (pytest tests/test_api.py -v), endpoint behavior verified with mocked graph, performance requirement validated
 

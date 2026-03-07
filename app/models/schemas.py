@@ -4,7 +4,7 @@ This module defines all data models used across agents, guardrails, and the API 
 All models use Pydantic v2 for validation and serialization.
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Transaction(BaseModel):
@@ -68,8 +68,8 @@ class ChatRequest(BaseModel):
         session_id: Unique identifier for the conversation session
         message: The customer's input message
     """
-    session_id: str
-    message: str
+    session_id: str = Field(..., min_length=1, description="Unique session identifier")
+    message: str = Field(..., min_length=1, description="Customer's message text")
 
 
 class ChatResponse(BaseModel):
@@ -78,8 +78,12 @@ class ChatResponse(BaseModel):
     Attributes:
         session_id: The conversation session identifier (matches request)
         response: The agent's response message
-        agent: Name of the agent that produced the response (e.g., "greeter", "bouncer", "specialist")
+        current_agent: Name of the agent that handled this turn
+        is_authenticated: Whether the customer has been authenticated
+        conversation_ended: Whether the conversation has ended
     """
     session_id: str
     response: str
-    agent: str
+    current_agent: str
+    is_authenticated: bool
+    conversation_ended: bool
