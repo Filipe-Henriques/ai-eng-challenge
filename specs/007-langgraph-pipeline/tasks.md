@@ -21,8 +21,8 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Create the pipeline module structure and imports
 
-- [ ] T001 Create app/graph/pipeline.py with module docstring and imports (StateGraph, START, END from langgraph.graph)
-- [ ] T002 Add imports for GraphState from app.graph.state and agent functions (greeter_agent, bouncer_agent, specialist_agent)
+- [X] T001 Create app/graph/pipeline.py with module docstring and imports (StateGraph, START, END from langgraph.graph)
+- [X] T002 Add imports for GraphState from app.graph.state and agent functions (greeter_agent, bouncer_agent, specialist_agent)
 
 **Checkpoint**: Module imports without errors
 
@@ -34,9 +34,9 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **⚠️ Note**: These functions are pure (no side effects) and can be implemented in parallel
 
-- [ ] T003 [P] Implement route_after_greeter(state: GraphState) -> str in app/graph/pipeline.py
-- [ ] T004 [P] Implement route_after_bouncer(state: GraphState) -> str in app/graph/pipeline.py
-- [ ] T005 [P] Implement route_after_specialist(state: GraphState) -> str in app/graph/pipeline.py
+- [X] T003 [P] Implement route_after_greeter(state: GraphState) -> str in app/graph/pipeline.py
+- [X] T004 [P] Implement route_after_bouncer(state: GraphState) -> str in app/graph/pipeline.py
+- [X] T005 [P] Implement route_after_specialist(state: GraphState) -> str in app/graph/pipeline.py
 
 **Checkpoint**: All routing functions defined and return correct node names based on state
 
@@ -46,13 +46,13 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Build and compile the StateGraph with all nodes and edges
 
-- [ ] T006 Implement build_graph() factory function in app/graph/pipeline.py
-- [ ] T007 Add 5 nodes to workflow (greeter, bouncer, specialist_standard, specialist_premium, specialist_vip)
-- [ ] T008 Set entry point to greeter node
-- [ ] T009 Add conditional edge from greeter using route_after_greeter
-- [ ] T010 Add conditional edge from bouncer using route_after_bouncer
-- [ ] T011 Add conditional edges from all three specialist nodes using route_after_specialist
-- [ ] T012 Compile graph with interrupt_after for all 5 nodes
+- [X] T006 Implement build_graph() factory function in app/graph/pipeline.py
+- [X] T007 Add 5 nodes to workflow (greeter, bouncer, specialist_standard, specialist_premium, specialist_vip)
+- [X] T008 Set entry point to greeter node
+- [X] T009 Add conditional edge from greeter using route_after_greeter
+- [X] T010 Add conditional edge from bouncer using route_after_bouncer
+- [X] T011 Add conditional edges from all three specialist nodes using route_after_specialist
+- [X] T012 Compile graph with interrupt_after for all 5 nodes
 
 **Checkpoint**: build_graph() returns compiled StateGraph without errors
 
@@ -62,7 +62,7 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Export the compiled graph as module-level constant
 
-- [ ] T013 Create module-level graph constant by calling build_graph() in app/graph/pipeline.py
+- [X] T013 Create module-level graph constant by calling build_graph() in app/graph/pipeline.py
 
 **Checkpoint**: `from app.graph.pipeline import graph` works without errors, graph is ready for FastAPI layer
 
@@ -72,14 +72,14 @@ This project uses single project structure with `app/` for source and `tests/` f
 
 **Purpose**: Verify routing logic and graph structure
 
-- [ ] T014 Create tests/test_pipeline.py with test setup
-- [ ] T015 [P] Write test_build_graph() to verify compilation succeeds
-- [ ] T016 [P] Write test_route_after_greeter() for all three scenarios (ended, authenticated, waiting)
-- [ ] T017 [P] Write test_route_after_bouncer() for all three tiers plus fallback
-- [ ] T018 [P] Write test_route_after_specialist() for loop and termination
-- [ ] T019 [P] Write test_graph_nodes() to verify all 5 nodes exist in compiled graph
-- [ ] T020 [P] Write test_async_invocation() to verify graph.ainvoke() works with async execution
-- [ ] T021 [P] Write test_interrupt_behavior() to verify interrupt_after pauses execution after each agent turn
+- [X] T014 Create tests/test_pipeline.py with test setup
+- [X] T015 [P] Write test_build_graph() to verify compilation succeeds
+- [X] T016 [P] Write test_route_after_greeter() for all three scenarios (ended, authenticated, waiting)
+- [X] T017 [P] Write test_route_after_bouncer() for all three tiers plus fallback
+- [X] T018 [P] Write test_route_after_specialist() for loop and termination
+- [X] T019 [P] Write test_graph_nodes() to verify all 5 nodes exist in compiled graph
+- [X] T020 [P] Write test_async_invocation() to verify graph.ainvoke() works with async execution
+- [X] T021 [P] Write test_interrupt_behavior() to verify interrupt_after pauses execution after each agent turn
 
 **Checkpoint**: All pipeline tests pass (pytest tests/test_pipeline.py), routing functions are pure (no LLM calls needed), async and interrupt behavior validated
 

@@ -371,12 +371,12 @@ def test_full_greeter_flow_integration():
         - Final state has is_authenticated=True
         - Routing directs to bouncer agent
     """
-    from app.graph.pipeline import create_graph
+    from app.graph.pipeline import build_graph
     from app.graph.state import create_initial_state
     from app.models.schemas import User
 
     # Create graph
-    graph = create_graph()
+    graph = build_graph()
 
     # Initialize conversation
     initial_state = create_initial_state("test-session")
