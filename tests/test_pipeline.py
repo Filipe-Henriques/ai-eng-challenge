@@ -280,3 +280,151 @@ def test_interrupt_behavior():
     # The key test is that build_graph() compiles with interrupt_after
     # parameter, which we've verified in the implementation
     # Integration tests will verify actual interrupt behavior
+
+
+# =============================================================================
+# Feature 009-testing-strategy: Required Test Names
+# =============================================================================
+# The following tests implement the specific test names required by
+# the testing strategy spec (009). Some overlap with existing tests above.
+
+
+def test_route_greeter_to_bouncer():
+    """Test route_after_greeter returns 'bouncer' when is_authenticated=True."""
+    from app.graph.pipeline import route_after_greeter
+    from app.graph.state import State
+    
+    state = State(
+        messages=[],
+        session_id="test",
+        current_agent="greeter",
+        verified_user=None,
+        is_authenticated=True,
+        customer_tier=None,
+        customer_intent=None,
+        verification_attempts=0,
+        collected_fields={},
+        specialist_needed=False,
+        conversation_ended=False,
+    )
+    
+    result = route_after_greeter(state)
+    assert result == "bouncer"
+
+
+def test_route_greeter_to_end_not_auth():
+    """Test route_after_greeter returns END when is_authenticated=False."""
+    from langgraph.graph import END
+    from app.graph.pipeline import route_after_greeter
+    from app.graph.state import State
+    
+    state = State(
+        messages=[],
+        session_id="test",
+        current_agent="greeter",
+        verified_user=None,
+        is_authenticated=False,
+        customer_tier=None,
+        customer_intent=None,
+        verification_attempts=0,
+        collected_fields={},
+        specialist_needed=False,
+        conversation_ended=False,
+    )
+    
+    result = route_after_greeter(state)
+    assert result == END
+
+
+def test_route_greeter_to_end_ended():
+    """Test route_after_greeter returns END when conversation_ended=True."""
+    from langgraph.graph import END
+    from app.graph.pipeline import route_after_greeter
+    from app.graph.state import State
+    
+    state = State(
+        messages=[],
+        session_id="test",
+        current_agent="greeter",
+        verified_user=None,
+        is_authenticated=False,
+        customer_tier=None,
+        customer_intent=None,
+        verification_attempts=0,
+        collected_fields={},
+        specialist_needed=False,
+        conversation_ended=True,
+    )
+    
+    result = route_after_greeter(state)
+    assert result == END
+
+
+def test_route_bouncer_standard():
+    """Test route_after_bouncer routes to specialist_standard."""
+    from app.graph.pipeline import route_after_bouncer
+    from app.graph.state import State
+    
+    state = State(
+        messages=[],
+        session_id="test",
+        current_agent="bouncer",
+        verified_user=None,
+        is_authenticated=True,
+        customer_tier="standard",
+        customer_intent=None,
+        verification_attempts=0,
+        collected_fields={},
+        specialist_needed=False,
+        conversation_ended=False,
+    )
+    
+    result = route_after_bouncer(state)
+    assert "standard" in result
+
+
+def test_route_specialist_loop():
+    """Test route_after_specialist loops when conversation_ended=False."""
+    from app.graph.pipeline import route_after_specialist
+    from app.graph.state import State
+    
+    state = State(
+        messages=[],
+        session_id="test",
+        current_agent="specialist_standard",
+        verified_user=None,
+        is_authenticated=True,
+        customer_tier="standard",
+        customer_intent=None,
+        verification_attempts=0,
+        collected_fields={},
+        specialist_needed=False,
+        conversation_ended=False,
+    )
+    
+    result = route_after_specialist(state)
+    assert result == "specialist_standard"
+
+
+def test_route_specialist_end():
+    """Test route_after_specialist returns END when conversation_ended=True."""
+    from langgraph.graph import END
+    from app.graph.pipeline import route_after_specialist
+    from app.graph.state import State
+    
+    state = State(
+        messages=[],
+        session_id="test",
+        current_agent="specialist_standard",
+        verified_user=None,
+        is_authenticated=True,
+        customer_tier="standard",
+        customer_intent=None,
+        verification_attempts=0,
+        collected_fields={},
+        specialist_needed=False,
+        conversation_ended=True,
+    )
+    
+    result = route_after_specialist(state)
+    assert result == END

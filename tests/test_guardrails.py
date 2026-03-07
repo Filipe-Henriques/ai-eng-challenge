@@ -452,3 +452,154 @@ class TestFalsePositiveRate:
             f"False positive rate {false_positive_rate:.1f}% exceeds 5% target "
             f"({false_positives}/{len(frustrated_messages)} messages blocked)"
         )
+
+# =============================================================================
+# Feature 009-testing-strategy: Required Test Names
+# =============================================================================
+# The following tests implement the specific test names required by
+# the testing strategy spec (009). Some overlap with existing tests above.
+
+
+@patch("app.guardrails.guardrails.openai_client")
+def test_toxicity_detected(mock_client):
+    """Test check_toxicity returns warning when LLM classifies message as toxic."""
+    mock_response = Mock()
+    mock_response.choices = [Mock()]
+    mock_response.choices[0].message.content = "toxic"
+    mock_client.chat.completions.create.return_value = mock_response
+    
+    from app.guardrails.config import TOXICITY_WARNING
+    result = check_toxicity("You're useless!")
+    
+    assert result == TOXICITY_WARNING
+
+
+@patch("app.guardrails.guardrails.openai_client")
+def test_toxicity_safe(mock_client):
+    """Test check_toxicity returns None when LLM classifies message as safe."""
+    mock_response = Mock()
+    mock_response.choices = [Mock()]
+    mock_response.choices[0].message.content = "safe"
+    mock_client.chat.completions.create.return_value = mock_response
+    
+    result = check_toxicity("What's my account balance?")
+    
+    assert result is None
+
+
+@patch("app.guardrails.guardrails.openai_client")
+def test_topic_off_topic(mock_client):
+    """Test check_topic returns refusal when LLM classifies as off-topic."""
+    mock_response = Mock()
+    mock_response.choices = [Mock()]
+    mock_response.choices[0].message.content = "off_topic"
+    mock_client.chat.completions.create.return_value = mock_response
+    
+    from app.guardrails.config import OFF_TOPIC_REFUSAL
+    result = check_topic("How do I code in Python?")
+    
+    assert result == OFF_TOPIC_REFUSAL
+
+
+@patch("app.guardrails.guardrails.openai_client")
+def test_topic_on_topic(mock_client):
+    """Test check_topic returns None when LLM classifies as on-topic."""
+    mock_response = Mock()
+    mock_response.choices = [Mock()]
+    mock_response.choices[0].message.content = "on_topic"
+    mock_client.chat.completions.create.return_value = mock_response
+    
+    result = check_topic("What's my account balance?")
+    
+    assert result is None
+
+
+def test_pii_phone_redacted():
+    """Test check_pii redacts phone numbers for unauthenticated users."""
+    response = "Please call us at +1122334455 for assistance."
+    result = check_pii(response, is_authenticated=False)
+    
+    assert "[REDACTED]" in result
+    assert "+1122334455" not in result
+
+
+def test_pii_iban_redacted():
+    """Test check_pii redacts IBANs for unauthenticated users."""
+    response = "Your IBAN is DE89370400440532013000."
+    result = check_pii(response, is_authenticated=False)
+    
+    assert "[REDACTED]" in result
+    assert "DE89370400440532013000" not in result
+
+
+def test_pii_authenticated_unchanged():
+    """Test check_pii returns response unchanged for authenticated users."""
+    response = "Your phone is +1122334455 and IBAN is DE89370400440532013000."
+    result = check_pii(response, is_authenticated=True)
+    
+    assert result == response
+    assert "+1122334455" in result
+    assert "DE89370400440532013000" in result
+    assert "[REDACTED]" not in result
+
+
+@patch("app.guardrails.guardrails.check_toxicity")
+@patch("app.guardrails.guardrails.check_topic")
+@patch("app.guardrails.guardrails.check_pii")
+def test_guardrails_short_circuit_toxicity(mock_pii, mock_topic, mock_toxicity):
+    """Test run_guardrails short-circuits when toxicity is detected."""
+    from app.guardrails.config import TOXICITY_WARNING
+    mock_toxicity.return_value = TOXICITY_WARNING
+    
+    result = run_guardrails(
+        message="You're useless!",
+        proposed_response="",
+        is_authenticated=False
+    )
+    
+    assert result.is_safe is False
+    assert result.blocked_reason == "toxic"
+    assert not mock_topic.called
+    assert not mock_pii.called
+
+
+@patch("app.guardrails.guardrails.check_toxicity")
+@patch("app.guardrails.guardrails.check_topic")
+@patch("app.guardrails.guardrails.check_pii")
+def test_guardrails_short_circuit_topic(mock_pii, mock_topic, mock_toxicity):
+    """Test run_guardrails short-circuits when off-topic is detected."""
+    from app.guardrails.config import OFF_TOPIC_REFUSAL
+    mock_toxicity.return_value = None
+    mock_topic.return_value = OFF_TOPIC_REFUSAL
+    
+    result = run_guardrails(
+        message="How do I code in Python?",
+        proposed_response="",
+        is_authenticated=False
+    )
+    
+    assert result.is_safe is False
+    assert result.blocked_reason == "off_topic"
+    assert not mock_pii.called
+
+
+@patch("app.guardrails.guardrails.check_toxicity")
+@patch("app.guardrails.guardrails.check_topic")
+@patch("app.guardrails.guardrails.check_pii")
+def test_guardrails_safe_applies_pii(mock_pii, mock_topic, mock_toxicity):
+    """Test run_guardrails applies PII redaction when all checks pass."""
+    mock_toxicity.return_value = None
+    mock_topic.return_value = None
+    mock_pii.return_value = "Your balance is [REDACTED]"
+    
+    result = run_guardrails(
+        message="What's my balance?",
+        proposed_response="Your balance is 5000.00 EUR",
+        is_authenticated=False
+    )
+    
+    assert result.is_safe is True
+    assert result.blocked_reason is None
+    assert result.safe_response is None
+    assert result.sanitised_response == "Your balance is [REDACTED]"
+    assert mock_pii.called

@@ -21,11 +21,11 @@
 
 **Independent Test**: Run `pytest --co` and verify no marker warnings
 
-- [ ] T001 Create or update pyproject.toml with pytest configuration section
-- [ ] T002 Add asyncio_mode = "auto" setting to pyproject.toml
-- [ ] T003 Add custom e2e marker definition to pyproject.toml
-- [ ] T004 Add testpaths = ["tests"] to pyproject.toml
-- [ ] T005 Verify configuration with pytest --co (collect-only mode)
+- [X] T001 Create or update pyproject.toml with pytest configuration section
+- [X] T002 Add asyncio_mode = "auto" setting to pyproject.toml
+- [X] T003 Add custom e2e marker definition to pyproject.toml
+- [X] T004 Add testpaths = ["tests"] to pyproject.toml
+- [X] T005 Verify configuration with pytest --co (collect-only mode)
 
 **Checkpoint**: Pytest configured correctly — test files can now be created
 
@@ -39,13 +39,13 @@
 
 **Independent Test**: Import fixtures in a test file and verify they work without errors
 
-- [ ] T006 Create tests/conftest.py file
-- [ ] T007 [P] Define mock_user fixture (scope=session) for Alice Martin (user_001, standard tier) in tests/conftest.py
-- [ ] T008 [P] Define mock_vip_user fixture (scope=session) for Charlie Brown (user_003, VIP tier) in tests/conftest.py
-- [ ] T009 [P] Define mock_account fixture (scope=session) with €5000 balance and 3 transactions in tests/conftest.py
-- [ ] T010 [P] Define base_state fixture (scope=function) with minimal GraphState in tests/conftest.py
-- [ ] T011 [P] Define authenticated_state fixture (scope=function) with is_authenticated=True in tests/conftest.py
-- [ ] T012 [P] Define mock_llm_response fixture factory function in tests/conftest.py
+- [X] T006 Create tests/conftest.py file
+- [X] T007 [P] Define mock_user fixture (scope=session) for Alice Martin (user_001, standard tier) in tests/conftest.py
+- [X] T008 [P] Define mock_vip_user fixture (scope=session) for Charlie Brown (user_003, VIP tier) in tests/conftest.py
+- [X] T009 [P] Define mock_account fixture (scope=session) with €5000 balance and 3 transactions in tests/conftest.py
+- [X] T010 [P] Define base_state fixture (scope=function) with minimal GraphState in tests/conftest.py
+- [X] T011 [P] Define authenticated_state fixture (scope=function) with is_authenticated=True in tests/conftest.py
+- [X] T012 [P] Define mock_llm_response fixture factory function in tests/conftest.py
 
 **Checkpoint**: Foundation ready — all test files can use shared fixtures
 
@@ -57,14 +57,14 @@
 
 **Independent Test**: Run `pytest tests/test_models.py -v`
 
-- [ ] T013 Create tests/test_models.py file
-- [ ] T014 [P] Implement test_user_creation in tests/test_models.py
-- [ ] T015 [P] Implement test_account_creation in tests/test_models.py
-- [ ] T016 [P] Implement test_find_user_2_of_3_name_phone in tests/test_models.py
-- [ ] T017 [P] Implement test_find_user_2_of_3_name_iban in tests/test_models.py
-- [ ] T018 [P] Implement test_find_user_2_of_3_phone_iban in tests/test_models.py
-- [ ] T019 [P] Implement test_find_user_1_of_3_fails in tests/test_models.py
-- [ ] T020 [P] Implement test_find_user_wrong_fields_fails in tests/test_models.py
+- [X] T013 Create tests/test_models.py file
+- [X] T014 [P] Implement test_user_creation in tests/test_models.py
+- [X] T015 [P] Implement test_account_creation in tests/test_models.py
+- [X] T016 [P] Implement test_find_user_2_of_3_name_phone in tests/test_models.py
+- [X] T017 [P] Implement test_find_user_2_of_3_name_iban in tests/test_models.py
+- [X] T018 [P] Implement test_find_user_2_of_3_phone_iban in tests/test_models.py
+- [X] T019 [P] Implement test_find_user_1_of_3_fails in tests/test_models.py
+- [X] T020 [P] Implement test_find_user_wrong_fields_fails in tests/test_models.py
 
 **Checkpoint**: ✓ All 7 model tests passing
 
@@ -76,17 +76,17 @@
 
 **Independent Test**: Run `pytest tests/test_guardrails.py -v`
 
-- [ ] T021 Create tests/test_guardrails.py file
-- [ ] T022 [P] Implement test_toxicity_detected with mocked LLM response in tests/test_guardrails.py
-- [ ] T023 [P] Implement test_toxicity_safe with mocked LLM response in tests/test_guardrails.py
-- [ ] T024 [P] Implement test_topic_off_topic with mocked LLM response in tests/test_guardrails.py
-- [ ] T025 [P] Implement test_topic_on_topic with mocked LLM response in tests/test_guardrails.py
-- [ ] T026 [P] Implement test_pii_phone_redacted (no mocking, pure regex) in tests/test_guardrails.py
-- [ ] T027 [P] Implement test_pii_iban_redacted (no mocking, pure regex) in tests/test_guardrails.py
-- [ ] T028 [P] Implement test_pii_authenticated_unchanged in tests/test_guardrails.py
-- [ ] T029 [P] Implement test_guardrails_short_circuit_toxicity with mocked checks in tests/test_guardrails.py
-- [ ] T030 [P] Implement test_guardrails_short_circuit_topic with mocked checks in tests/test_guardrails.py
-- [ ] T031 [P] Implement test_guardrails_safe_applies_pii with mocked checks in tests/test_guardrails.py
+- [X] T021 Create tests/test_guardrails.py file
+- [X] T022 [P] Implement test_toxicity_detected with mocked LLM response in tests/test_guardrails.py
+- [X] T023 [P] Implement test_toxicity_safe with mocked LLM response in tests/test_guardrails.py
+- [X] T024 [P] Implement test_topic_off_topic with mocked LLM response in tests/test_guardrails.py
+- [X] T025 [P] Implement test_topic_on_topic with mocked LLM response in tests/test_guardrails.py
+- [X] T026 [P] Implement test_pii_phone_redacted (no mocking, pure regex) in tests/test_guardrails.py
+- [X] T027 [P] Implement test_pii_iban_redacted (no mocking, pure regex) in tests/test_guardrails.py
+- [X] T028 [P] Implement test_pii_authenticated_unchanged in tests/test_guardrails.py
+- [X] T029 [P] Implement test_guardrails_short_circuit_toxicity with mocked checks in tests/test_guardrails.py
+- [X] T030 [P] Implement test_guardrails_short_circuit_topic with mocked checks in tests/test_guardrails.py
+- [X] T031 [P] Implement test_guardrails_safe_applies_pii with mocked checks in tests/test_guardrails.py
 
 **Checkpoint**: ✓ All 10 guardrails tests passing
 
@@ -98,33 +98,33 @@
 
 **Independent Test**: Run `pytest tests/test_agents.py -v`
 
-- [ ] T032 Create tests/test_agents.py file
+- [X] T032 Create tests/test_agents.py file
 
 ### Greeter Agent Tests (7 tests)
 
-- [ ] T033 [P] Implement test_greeter_welcome with mocked LLM in tests/test_agents.py
-- [ ] T034 [P] Implement test_greeter_extracts_fields with mocked LLM extraction in tests/test_agents.py
-- [ ] T035 [P] Implement test_greeter_verification_success with mocked find_user_by_details in tests/test_agents.py
-- [ ] T036 [P] Implement test_greeter_verification_failure with mocked find_user_by_details in tests/test_agents.py
-- [ ] T037 [P] Implement test_greeter_secret_answer_correct with mocked LLM in tests/test_agents.py
-- [ ] T038 [P] Implement test_greeter_secret_answer_wrong with mocked LLM in tests/test_agents.py
-- [ ] T039 [P] Implement test_greeter_max_attempts with verification_attempts=3 in tests/test_agents.py
+- [X] T033 [P] Implement test_greeter_welcome with mocked LLM in tests/test_agents.py
+- [X] T034 [P] Implement test_greeter_extracts_fields with mocked LLM extraction in tests/test_agents.py
+- [X] T035 [P] Implement test_greeter_verification_success with mocked find_user_by_details in tests/test_agents.py
+- [X] T036 [P] Implement test_greeter_verification_failure with mocked find_user_by_details in tests/test_agents.py
+- [X] T037 [P] Implement test_greeter_secret_answer_correct with mocked LLM in tests/test_agents.py
+- [X] T038 [P] Implement test_greeter_secret_answer_wrong with mocked LLM in tests/test_agents.py
+- [X] T039 [P] Implement test_greeter_max_attempts with verification_attempts=3 in tests/test_agents.py
 
 ### Bouncer Agent Tests (5 tests)
 
-- [ ] T040 [P] Implement test_bouncer_routes_standard for tier routing in tests/test_agents.py
-- [ ] T041 [P] Implement test_bouncer_routes_premium for tier routing in tests/test_agents.py
-- [ ] T042 [P] Implement test_bouncer_routes_vip for tier routing in tests/test_agents.py
-- [ ] T043 [P] Implement test_bouncer_classifies_intent with mocked LLM in tests/test_agents.py
-- [ ] T044 [P] Implement test_bouncer_low_confidence_fallback with mocked LLM in tests/test_agents.py
+- [X] T040 [P] Implement test_bouncer_routes_standard for tier routing in tests/test_agents.py
+- [X] T041 [P] Implement test_bouncer_routes_premium for tier routing in tests/test_agents.py
+- [X] T042 [P] Implement test_bouncer_routes_vip for tier routing in tests/test_agents.py
+- [X] T043 [P] Implement test_bouncer_classifies_intent with mocked LLM in tests/test_agents.py
+- [X] T044 [P] Implement test_bouncer_low_confidence_fallback with mocked LLM in tests/test_agents.py
 
 ### Specialist Agent Tool Tests (5 tests)
 
-- [ ] T045 [P] Implement test_specialist_get_balance calling tool directly in tests/test_agents.py
-- [ ] T046 [P] Implement test_specialist_transfer_success with sufficient balance in tests/test_agents.py
-- [ ] T047 [P] Implement test_specialist_transfer_insufficient with insufficient balance in tests/test_agents.py
-- [ ] T048 [P] Implement test_specialist_report_lost_card calling tool directly in tests/test_agents.py
-- [ ] T049 Add fixture or setup/teardown to reset mock DB state between tool tests in tests/test_agents.py
+- [X] T045 [P] Implement test_specialist_get_balance calling tool directly in tests/test_agents.py
+- [X] T046 [P] Implement test_specialist_transfer_success with sufficient balance in tests/test_agents.py
+- [X] T047 [P] Implement test_specialist_transfer_insufficient with insufficient balance in tests/test_agents.py
+- [X] T048 [P] Implement test_specialist_report_lost_card calling tool directly in tests/test_agents.py
+- [X] T049 Add fixture or setup/teardown to reset mock DB state between tool tests in tests/test_agents.py
 
 **Checkpoint**: ✓ All 17 agent tests passing
 
@@ -136,14 +136,14 @@
 
 **Independent Test**: Run `pytest tests/test_pipeline.py -v`
 
-- [ ] T050 Create tests/test_pipeline.py file
-- [ ] T051 [P] Implement test_build_graph verifying graph construction in tests/test_pipeline.py
-- [ ] T052 [P] Implement test_route_greeter_to_bouncer with is_authenticated=True in tests/test_pipeline.py
-- [ ] T053 [P] Implement test_route_greeter_to_end_not_auth with is_authenticated=False in tests/test_pipeline.py
-- [ ] T054 [P] Implement test_route_greeter_to_end_ended with conversation_ended=True in tests/test_pipeline.py
-- [ ] T055 [P] Implement test_route_bouncer_standard for specialist routing in tests/test_pipeline.py
-- [ ] T056 [P] Implement test_route_specialist_loop with conversation_ended=False in tests/test_pipeline.py
-- [ ] T057 [P] Implement test_route_specialist_end with conversation_ended=True in tests/test_pipeline.py
+- [X] T050 Create tests/test_pipeline.py file
+- [X] T051 [P] Implement test_build_graph verifying graph construction in tests/test_pipeline.py
+- [X] T052 [P] Implement test_route_greeter_to_bouncer with is_authenticated=True in tests/test_pipeline.py
+- [X] T053 [P] Implement test_route_greeter_to_end_not_auth with is_authenticated=False in tests/test_pipeline.py
+- [X] T054 [P] Implement test_route_greeter_to_end_ended with conversation_ended=True in tests/test_pipeline.py
+- [X] T055 [P] Implement test_route_bouncer_standard for specialist routing in tests/test_pipeline.py
+- [X] T056 [P] Implement test_route_specialist_loop with conversation_ended=False in tests/test_pipeline.py
+- [X] T057 [P] Implement test_route_specialist_end with conversation_ended=True in tests/test_pipeline.py
 
 **Checkpoint**: ✓ All 7 pipeline tests passing
 
@@ -155,15 +155,15 @@
 
 **Independent Test**: Run `pytest tests/test_api.py -v`
 
-- [ ] T058 Create tests/test_api.py file
-- [ ] T059 Import TestClient from fastapi.testclient and app from app.main in tests/test_api.py
-- [ ] T060 Create fixture to clear SESSION_STORE between tests in tests/test_api.py
-- [ ] T061 [P] Implement test_health_check for GET /health endpoint in tests/test_api.py
-- [ ] T062 [P] Implement test_new_session with mocked graph.ainvoke in tests/test_api.py
-- [ ] T063 [P] Implement test_existing_session with mocked graph.ainvoke in tests/test_api.py
-- [ ] T064 [P] Implement test_ended_conversation with mocked graph.ainvoke in tests/test_api.py
-- [ ] T065 [P] Implement test_response_structure validating JSON schema in tests/test_api.py
-- [ ] T066 [P] Implement test_error_handling for 500 errors in tests/test_api.py
+- [X] T058 Create tests/test_api.py file
+- [X] T059 Import TestClient from fastapi.testclient and app from app.main in tests/test_api.py
+- [X] T060 Create fixture to clear SESSION_STORE between tests in tests/test_api.py
+- [X] T061 [P] Implement test_health_check for GET /health endpoint in tests/test_api.py
+- [X] T062 [P] Implement test_new_session with mocked graph.ainvoke in tests/test_api.py
+- [X] T063 [P] Implement test_existing_session with mocked graph.ainvoke in tests/test_api.py
+- [X] T064 [P] Implement test_ended_conversation with mocked graph.ainvoke in tests/test_api.py
+- [X] T065 [P] Implement test_response_structure validating JSON schema in tests/test_api.py
+- [X] T066 [P] Implement test_error_handling for 500 errors in tests/test_api.py
 
 **Checkpoint**: ✓ All API integration tests passing
 
@@ -175,14 +175,14 @@
 
 **Independent Test**: Run `pytest -m e2e tests/test_e2e.py -v` (requires OPENAI_API_KEY)
 
-- [ ] T067 Create tests/test_e2e.py file
-- [ ] T068 Add module-level pytest.skip if OPENAI_API_KEY not set in tests/test_e2e.py
-- [ ] T069 [P] Implement test_e2e_full_verification_flow with multi-turn conversation in tests/test_e2e.py
-- [ ] T070 [P] Implement test_e2e_max_attempts_flow with 3 failed verifications in tests/test_e2e.py
-- [ ] T071 [P] Implement test_e2e_guardrail_toxicity with toxic message in tests/test_e2e.py
-- [ ] T072 [P] Implement test_e2e_guardrail_off_topic with off-topic message in tests/test_e2e.py
-- [ ] T073 [P] Implement test_e2e_vip_routing with VIP user authentication in tests/test_e2e.py
-- [ ] T074 Mark all E2E tests with @pytest.mark.e2e decorator in tests/test_e2e.py
+- [X] T067 Create tests/test_e2e.py file
+- [X] T068 Add module-level pytest.skip if OPENAI_API_KEY not set in tests/test_e2e.py
+- [X] T069 [P] Implement test_e2e_full_verification_flow with multi-turn conversation in tests/test_e2e.py
+- [X] T070 [P] Implement test_e2e_max_attempts_flow with 3 failed verifications in tests/test_e2e.py
+- [X] T071 [P] Implement test_e2e_guardrail_toxicity with toxic message in tests/test_e2e.py
+- [X] T072 [P] Implement test_e2e_guardrail_off_topic with off-topic message in tests/test_e2e.py
+- [X] T073 [P] Implement test_e2e_vip_routing with VIP user authentication in tests/test_e2e.py
+- [X] T074 Mark all E2E tests with @pytest.mark.e2e decorator in tests/test_e2e.py
 
 **Checkpoint**: ✓ All 5 E2E tests passing when run with pytest -m e2e
 
@@ -194,12 +194,12 @@
 
 **Independent Test**: Run full test suite and verify performance/coverage targets
 
-- [ ] T075 Run full unit + integration test suite and verify completion under 60 seconds
-- [ ] T076 Run pytest with coverage reporting: pytest --cov=app --cov-report=term
-- [ ] T077 Verify >80% code coverage target across app/ directory
-- [ ] T078 Create README section documenting how to run different test layers
-- [ ] T079 Document test execution commands (pytest, pytest -m "not e2e", pytest -m e2e)
-- [ ] T080 Add CI/CD configuration example for running tests in pipeline
+- [X] T075 Run full unit + integration test suite and verify completion under 60 seconds
+- [X] T076 Run pytest with coverage reporting: pytest --cov=app --cov-report=term
+- [X] T077 Verify >80% code coverage target across app/ directory
+- [X] T078 Create README section documenting how to run different test layers
+- [X] T079 Document test execution commands (pytest, pytest -m "not e2e", pytest -m e2e)
+- [X] T080 Add CI/CD configuration example for running tests in pipeline
 
 **Checkpoint**: ✓ Complete test suite meeting all quality targets
 
