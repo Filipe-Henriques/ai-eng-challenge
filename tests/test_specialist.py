@@ -308,8 +308,6 @@ class TestSpecialistAgentIntegration:
             }
             
             result = specialist_agent(state)
-            print(f"Message: {message}")
-            print(f"Result: {result}")
             assert result.get("conversation_ended") == True, f"Expected conversation_ended for message: {message}"
             response_text = result["messages"][0].content.lower()
             assert "specialized" in response_text or "connect" in response_text or "callback" in response_text

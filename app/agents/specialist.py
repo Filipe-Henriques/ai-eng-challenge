@@ -378,22 +378,39 @@ def specialist_agent(state: State) -> dict:
     # Step 2: Check for out-of-scope requests
     out_of_scope_keywords = [
         "mortgage", "investment", "invest", "new account", "open account",
-        "loan", "credit card", "close account", "account closure", "dispute",
+        "loan", "credit card", "close", "closure", "dispute",
         "financial planning", "financial advice", "stock", "bond"
     ]
     
     if messages:
         last_message_lower = last_message.lower()
+        # Special handling to avoid false positives for common banking terms
+        # Only trigger out-of-scope if keywords appear in context
         if any(keyword in last_message_lower for keyword in out_of_scope_keywords):
-            logger.info(f"Out-of-scope request detected: {last_message}")
-            handoff_message = """I appreciate your interest, but requests for mortgages, investments, 
+            # Make sure "close" is about account closure, not just "close to" or similar
+            if "close" in last_message_lower:
+                # Check if it's account closure context
+                if "account" in last_message_lower or "closure" in last_message_lower:
+                    logger.info(f"Out-of-scope request detected: {last_message}")
+                    handoff_message = """I appreciate your interest, but requests for mortgages, investments, 
 new accounts, loans, credit cards, account closures, disputes, or financial planning 
 require specialized assistance. I'd be happy to connect you with the appropriate team 
 member who can help you with this. Would you like me to arrange a callback?"""
-            return {
-                "messages": [AIMessage(content=handoff_message)],
-                "conversation_ended": True,
-            }
+                    return {
+                        "messages": [AIMessage(content=handoff_message)],
+                        "conversation_ended": True,
+                    }
+            else:
+                # Other keywords don't need context checking
+                logger.info(f"Out-of-scope request detected: {last_message}")
+                handoff_message = """I appreciate your interest, but requests for mortgages, investments, 
+new accounts, loans, credit cards, account closures, disputes, or financial planning 
+require specialized assistance. I'd be happy to connect you with the appropriate team 
+member who can help you with this. Would you like me to arrange a callback?"""
+                return {
+                    "messages": [AIMessage(content=handoff_message)],
+                    "conversation_ended": True,
+                }
     
     # Step 3: Check turn count and enforce 10-turn limit
     turn_count = state.get("turn_count", 0)
