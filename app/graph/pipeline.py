@@ -24,6 +24,7 @@ from langgraph.graph import StateGraph, END
 
 from app.graph.state import State
 from app.agents.greeter import greeter_agent
+from app.agents.bouncer import bouncer_agent
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -71,6 +72,36 @@ def route_after_greeter(state: State) -> Literal["bouncer", "end"]:
     return "end"
 
 
+def route_from_bouncer(state: State) -> str:
+    """Determine next node after Bouncer Agent completes.
+
+    Routing Logic:
+        - Route to the specialist agent specified in state["current_agent"]
+        - This should be one of: specialist_standard, specialist_premium
+        - For now, routes to END since specialist agents are not yet implemented
+
+    Args:
+        state: Current conversation state
+
+    Returns:
+        Specialist agent name from state["current_agent"]
+
+    Examples:
+        >>> # Standard tier customer
+        >>> state = {"current_agent": "specialist_standard"}
+        >>> route_from_bouncer(state)
+        'specialist_standard'
+
+        >>> # Premium tier customer
+        >>> state = {"current_agent": "specialist_premium"}
+        >>> route_from_bouncer(state)
+        'specialist_premium'
+    """
+    current_agent = state.get("current_agent", "specialist_standard")
+    logger.info(f"Bouncer routing to: {current_agent}")
+    return current_agent
+
+
 def create_graph() -> StateGraph:
     """Create and configure the LangGraph pipeline.
 
@@ -96,8 +127,10 @@ def create_graph() -> StateGraph:
 
     # Add agent nodes
     builder.add_node("greeter", greeter_agent)
-    # TODO: Add bouncer node when implemented
-    # TODO: Add specialist node when implemented
+    builder.add_node("bouncer", bouncer_agent)
+    # TODO: Add specialist nodes when implemented
+    # builder.add_node("specialist_standard", specialist_standard_agent)
+    # builder.add_node("specialist_premium", specialist_premium_agent)
 
     # Set entry point
     builder.set_entry_point("greeter")
@@ -106,7 +139,17 @@ def create_graph() -> StateGraph:
     builder.add_conditional_edges(
         "greeter",
         route_after_greeter,
-        {"bouncer": END, "end": END},  # Placeholder: Will route to "bouncer" node when implemented
+        {"bouncer": "bouncer", "end": END},
+    )
+
+    # Add conditional edges from bouncer
+    builder.add_conditional_edges(
+        "bouncer",
+        route_from_bouncer,
+        {
+            "specialist_standard": END,  # Placeholder until specialist implemented
+            "specialist_premium": END,  # Placeholder until specialist implemented
+        },
     )
 
     # Compile graph
