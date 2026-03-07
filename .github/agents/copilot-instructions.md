@@ -29,9 +29,9 @@ cd src; pytest; ruff check .
 Python 3.11+: Follow standard conventions
 
 ## Recent Changes
+- 006-specialist-agent: Added Python 3.11+ + LangGraph, LangChain, OpenAI (gpt-4o-mini), Pydantic v2
 - 005-bouncer-agent: Added Python 3.11 + LangGraph, LangChain (structured output), OpenAI (gpt-4o-mini), Pydantic v2
 - 004-greeter-agent: Added Python 3.11+ + LangGraph, LangChain, OpenAI (gpt-4o-mini), Pydantic v2, FastAPI
-- 003-guardrails: Added Python 3.11+ + OpenAI API (gpt-4o-mini for toxicity/topic classification), Pydantic v2 (data validation), Python re module (PII regex detection)
 
 
 <!-- MANUAL ADDITIONS START -->
