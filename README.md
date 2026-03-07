@@ -18,7 +18,7 @@ Here's how the dream team of AI agents rolls:
     If the customer has a specific, high-value request (like “Help me with my yacht insurance” 🛥️), this agent ensures they get to the right expert.
 
 -   **📜 Guardrails: The Rule Enforcer**  
-    This component keeps everything safe, professional, and aligned with bank policies. No accidental million-dollar loan approvals!
+    This component keeps everything safe, professional, and aligned with bank policies. No accidental million-dollar loan approvals! Provides three safety checks: toxicity detection, topic filtering, and PII protection. See [Guardrails Quickstart](specs/003-guardrails/quickstart.md) for integration guide.
 
 
 ## 🛠️ Technical Requirements
