@@ -7,6 +7,19 @@ All models use Pydantic v2 for validation and serialization.
 from pydantic import BaseModel
 
 
+class Transaction(BaseModel):
+    """Represents a single banking transaction.
+    
+    Attributes:
+        date: Transaction date in ISO 8601 format (YYYY-MM-DD)
+        description: Human-readable transaction description
+        amount: Transaction amount (negative for debits, positive for credits)
+    """
+    date: str
+    description: str
+    amount: float
+
+
 class User(BaseModel):
     """Represents a registered bank customer used for identity verification.
     
@@ -25,14 +38,27 @@ class User(BaseModel):
 
 
 class Account(BaseModel):
-    """Represents a bank account used to determine customer tier.
+    """Represents a bank account with full transaction history.
+    
+    This model extends the original Account to support the Specialist Agent's
+    banking tools.
     
     Attributes:
-        iban: Account IBAN (used as primary key for lookups)
-        premium: Whether the account holder is a premium client
+        user_id: Unique identifier linking to User (for ACCOUNTS_DB lookup)
+        iban: Account IBAN (International Bank Account Number)
+        premium: Whether the account holder is a premium client (determines tier)
+        balance: Current account balance
+        currency: Account currency code (e.g., "EUR", "USD", "GBP")
+        transactions: List of recent transactions (newest last)
+        card_blocked: Whether the account's card has been reported lost/stolen
     """
+    user_id: str
     iban: str
     premium: bool
+    balance: float
+    currency: str
+    transactions: list[Transaction]
+    card_blocked: bool
 
 
 class ChatRequest(BaseModel):

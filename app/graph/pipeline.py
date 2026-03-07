@@ -25,6 +25,7 @@ from langgraph.graph import StateGraph, END
 from app.graph.state import State
 from app.agents.greeter import greeter_agent
 from app.agents.bouncer import bouncer_agent
+from app.agents.specialist import specialist_agent
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -76,30 +77,36 @@ def route_from_bouncer(state: State) -> str:
     """Determine next node after Bouncer Agent completes.
 
     Routing Logic:
-        - Route to the specialist agent specified in state["current_agent"]
-        - This should be one of: specialist_standard, specialist_premium
-        - For now, routes to END since specialist agents are not yet implemented
+        - If conversation_ended=True: Route to END
+        - Otherwise: Route to "specialist" for banking operations fulfillment
 
     Args:
         state: Current conversation state
 
     Returns:
-        Specialist agent name from state["current_agent"]
+        "specialist" if customer needs banking service
+        "end" if conversation should terminate
 
     Examples:
-        >>> # Standard tier customer
-        >>> state = {"current_agent": "specialist_standard"}
+        >>> # Standard tier customer with banking request
+        >>> state = {"current_agent": "specialist", "conversation_ended": False}
         >>> route_from_bouncer(state)
-        'specialist_standard'
+        'specialist'
 
-        >>> # Premium tier customer
-        >>> state = {"current_agent": "specialist_premium"}
+        >>> # Conversation ended by bouncer
+        >>> state = {"conversation_ended": True}
         >>> route_from_bouncer(state)
-        'specialist_premium'
+        'end'
     """
-    current_agent = state.get("current_agent", "specialist_standard")
-    logger.info(f"Bouncer routing to: {current_agent}")
-    return current_agent
+    conversation_ended = state.get("conversation_ended", False)
+    
+    if conversation_ended:
+        logger.info("Conversation ended, routing to END")
+        return "end"
+    
+    # Route to specialist for banking operations
+    logger.info("Routing to specialist agent")
+    return "specialist"
 
 
 def create_graph() -> StateGraph:
@@ -128,9 +135,7 @@ def create_graph() -> StateGraph:
     # Add agent nodes
     builder.add_node("greeter", greeter_agent)
     builder.add_node("bouncer", bouncer_agent)
-    # TODO: Add specialist nodes when implemented
-    # builder.add_node("specialist_standard", specialist_standard_agent)
-    # builder.add_node("specialist_premium", specialist_premium_agent)
+    builder.add_node("specialist", specialist_agent)
 
     # Set entry point
     builder.set_entry_point("greeter")
@@ -147,10 +152,13 @@ def create_graph() -> StateGraph:
         "bouncer",
         route_from_bouncer,
         {
-            "specialist_standard": END,  # Placeholder until specialist implemented
-            "specialist_premium": END,  # Placeholder until specialist implemented
+            "specialist": "specialist",
+            "end": END,
         },
     )
+    
+    # Specialist always routes to END after completion
+    builder.add_edge("specialist", END)
 
     # Compile graph
     graph = builder.compile()

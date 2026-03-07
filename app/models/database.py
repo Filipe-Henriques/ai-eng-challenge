@@ -5,7 +5,7 @@ No persistence - all data is stored in memory.
 """
 
 import logging
-from app.models.schemas import User, Account
+from app.models.schemas import User, Account, Transaction
 
 
 class DatabaseUnavailableError(Exception):
@@ -159,10 +159,77 @@ def find_user_with_retry(fields: dict) -> User | None:
 
 
 # Mock accounts for testing (2 accounts, Maria intentionally excluded)
+# Updated to match the extended Account model structure
 MOCK_ACCOUNTS = [
-    Account(iban="DE89370400440532013000", premium=True),  # Lisa - Premium
-    Account(iban="GB29NWBK60161331926819", premium=False),  # John - Regular
+    Account(
+        user_id="user_001",
+        iban="DE89370400440532013000",
+        premium=True,
+        balance=5420.50,
+        currency="EUR",
+        transactions=[],
+        card_blocked=False
+    ),  # Lisa - Premium
+    Account(
+        user_id="user_002",
+        iban="GB29NWBK60161331926819",
+        premium=False,
+        balance=1247.80,
+        currency="GBP",
+        transactions=[],
+        card_blocked=False
+    ),  # John - Regular
 ]
+
+
+# Mock accounts with full banking data for Specialist Agent tools
+# (balance inquiry, transaction history, fund transfers, card blocking)
+ACCOUNTS_DB = {
+    "user_001": Account(
+        user_id="user_001",
+        iban="DE89370400440532013000",  # Lisa
+        premium=True,  # VIP tier
+        balance=5420.50,
+        currency="EUR",
+        transactions=[
+            Transaction(date="2026-03-01", description="Salary Deposit", amount=3000.0),
+            Transaction(date="2026-03-02", description="Rent Payment", amount=-1200.0),
+            Transaction(date="2026-03-03", description="Grocery Store", amount=-45.20),
+            Transaction(date="2026-03-04", description="Online Transfer from John", amount=150.0),
+            Transaction(date="2026-03-05", description="Utility Bill", amount=-84.30),
+        ],
+        card_blocked=False,
+    ),
+    "user_002": Account(
+        user_id="user_002",
+        iban="GB29NWBK60161331926819",  # John
+        premium=False,  # Standard tier
+        balance=1247.80,
+        currency="GBP",
+        transactions=[
+            Transaction(date="2026-03-01", description="Paycheck", amount=2500.0),
+            Transaction(date="2026-03-02", description="Transfer to Lisa", amount=-150.0),
+            Transaction(date="2026-03-03", description="Restaurant", amount=-62.50),
+            Transaction(date="2026-03-04", description="Gas Station", amount=-45.30),
+            Transaction(date="2026-03-06", description="Refund", amount=25.00),
+        ],
+        card_blocked=False,
+    ),
+    "user_003": Account(
+        user_id="user_003",
+        iban="FR7630006000011234567890189",  # Maria
+        premium=False,  # Standard tier
+        balance=325.10,
+        currency="EUR",
+        transactions=[
+            Transaction(date="2026-03-01", description="Freelance Payment", amount=500.0),
+            Transaction(date="2026-03-02", description="Groceries", amount=-89.40),
+            Transaction(date="2026-03-03", description="Coffee Shop", amount=-15.50),
+            Transaction(date="2026-03-05", description="ATM Withdrawal", amount=-70.0),
+        ],
+        card_blocked=False,
+    ),
+}
 
 
 def find_account_by_iban(iban: str) -> Account | None:
