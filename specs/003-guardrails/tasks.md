@@ -35,6 +35,7 @@
 - [ ] T004 Define `GuardrailResult` Pydantic model in `app/guardrails/guardrails.py` with fields: `is_safe: bool`, `blocked_reason: str | None`, `safe_response: str | None`, `sanitised_response: str`
 - [ ] T005 Add Pydantic field validators to `GuardrailResult` ensuring consistency between `is_safe` flag and blocking fields
 - [ ] T006 [P] Define pre-defined message constants in `app/guardrails/guardrails.py`: `OFF_TOPIC_REFUSAL`, `TOXICITY_WARNING`, `ERROR_MESSAGE`
+- [ ] T006a [P] Create `app/guardrails/config.py` with configurable response messages (OFF_TOPIC_REFUSAL, TOXICITY_WARNING, ERROR_MESSAGE) loadable from environment variables or defaults
 - [ ] T007 [P] Add Google Style docstring to `GuardrailResult` model explaining purpose and usage
 - [ ] T008 [P] Unit test for `GuardrailResult` model validation in `tests/test_guardrails.py` (test field consistency)
 
@@ -159,8 +160,8 @@
 
 **Purpose**: Non-functional requirements, documentation, and production readiness
 
-- [ ] T060 [P] Add basic metrics logging to `run_guardrails()`: emit block count by type (toxic, off_topic), PII redaction count, latency
-- [ ] T061 [P] Add error rate metric to `run_guardrails()` for monitoring guardrail failures
+- [ ] T060 [P] Add basic metrics logging to `run_guardrails()`: emit block count by type (toxic, off_topic), PII redaction count, latency using Python logging module at INFO level with structured format (e.g., JSON)
+- [ ] T061 [P] Add error rate metric to `run_guardrails()` for monitoring guardrail failures using Python logging module
 - [ ] T062 [P] Verify no message content is logged in any function (privacy requirement)
 - [ ] T063 [P] Performance test: Verify p95 latency <500ms for `run_guardrails()` with mocked LLM in `tests/test_guardrails.py`
 - [ ] T064 [P] Performance test: Verify average latency <200ms for `run_guardrails()` with mocked LLM in `tests/test_guardrails.py`
@@ -168,6 +169,8 @@
 - [ ] T066 [P] Verify all functions follow Google Style docstring format per constitution
 - [ ] T067 [P] Format code with Black per constitution Section 5
 - [ ] T068 [P] Update README.md with guardrails integration instructions (link to quickstart.md)
+- [ ] T069 [P] Create `docs/guardrails-prompt-maintenance.md` documenting how to version, update, and tune LLM system prompts for toxicity/topic classification
+- [ ] T070 [P] Add false positive rate validation test in `tests/test_guardrails.py`: test 50-100 legitimate frustrated banking messages to verify <5% false positive rate (SC-009)
 
 ---
 
@@ -209,8 +212,8 @@ Each iteration delivers independently testable value and can be demonstrated to 
 
 ## Summary
 
-- **Total Tasks**: 68
-- **Parallelizable Tasks**: 45 (marked with [P])
+- **Total Tasks**: 71
+- **Parallelizable Tasks**: 48 (marked with [P])
 - **User Story Distribution**:
   - Setup: 3 tasks
   - Foundational: 5 tasks (blocking)

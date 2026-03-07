@@ -91,7 +91,7 @@ The codebase MUST follow a strict separation of concerns:
 | Component | Technology |
 | :--- | :--- |
 | Agent Framework | LangGraph |
-| LLM | `gpt-4.1-mini` (via OpenAI API) |
+| LLM | `gpt-4o-mini` (via OpenAI API) |
 | API Framework | FastAPI |
 | Data Validation | Pydantic v2 |
 | Testing | Pytest + pytest-asyncio |

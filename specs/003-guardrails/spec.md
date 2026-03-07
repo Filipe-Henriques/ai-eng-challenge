@@ -111,8 +111,8 @@ As a **DEUS Bank data protection officer**, I need the system to prevent sensiti
 
 ### Measurable Outcomes
 
-- **SC-001**: 99% of toxic messages (profanity, threats, harassment) are correctly identified and blocked within 500ms
-- **SC-002**: 95% of off-topic requests (non-banking subjects) are correctly identified and politely declined
+- **SC-001**: Toxic messages (profanity, threats, harassment) are correctly identified and blocked within 500ms; baseline accuracy established via integration tests with production monitoring ongoing
+- **SC-002**: Off-topic requests (non-banking subjects) are correctly identified and politely declined; baseline accuracy established via integration tests with production monitoring ongoing
 - **SC-003**: 100% of phone numbers and IBANs are redacted from agent responses to unauthenticated users
 - **SC-004**: 0% false positive rate for authenticated users (no PII redaction when user is verified)
 - **SC-005**: System handles at least 1000 concurrent guardrail evaluations without degradation
