@@ -20,9 +20,9 @@
 
 **Purpose**: Initialize guardrails module structure per constitution Section 4
 
-- [ ] T001 Create directory structure: `app/guardrails/` with `__init__.py`
-- [ ] T002 Create test file: `tests/test_guardrails.py`
-- [ ] T003 Add OpenAI SDK dependency to `requirements.txt` (openai>=1.0.0)
+- [X] T001 Create directory structure: `app/guardrails/` with `__init__.py`
+- [X] T002 Create test file: `tests/test_guardrails.py`
+- [X] T003 Add OpenAI SDK dependency to `requirements.txt` (openai>=1.0.0)
 
 ---
 
@@ -32,12 +32,12 @@
 
 **⚠️ CRITICAL**: No user story implementation can begin until this phase is complete
 
-- [ ] T004 Define `GuardrailResult` Pydantic model in `app/guardrails/guardrails.py` with fields: `is_safe: bool`, `blocked_reason: str | None`, `safe_response: str | None`, `sanitised_response: str`
-- [ ] T005 Add Pydantic field validators to `GuardrailResult` ensuring consistency between `is_safe` flag and blocking fields
-- [ ] T006 [P] Define pre-defined message constants in `app/guardrails/guardrails.py`: `OFF_TOPIC_REFUSAL`, `TOXICITY_WARNING`, `ERROR_MESSAGE`
-- [ ] T006a [P] Create `app/guardrails/config.py` with configurable response messages (OFF_TOPIC_REFUSAL, TOXICITY_WARNING, ERROR_MESSAGE) loadable from environment variables or defaults
-- [ ] T007 [P] Add Google Style docstring to `GuardrailResult` model explaining purpose and usage
-- [ ] T008 [P] Unit test for `GuardrailResult` model validation in `tests/test_guardrails.py` (test field consistency)
+- [X] T004 Define `GuardrailResult` Pydantic model in `app/guardrails/guardrails.py` with fields: `is_safe: bool`, `blocked_reason: str | None`, `safe_response: str | None`, `sanitised_response: str`
+- [X] T005 Add Pydantic field validators to `GuardrailResult` ensuring consistency between `is_safe` flag and blocking fields
+- [X] T006 [P] Define pre-defined message constants in `app/guardrails/guardrails.py`: `OFF_TOPIC_REFUSAL`, `TOXICITY_WARNING`, `ERROR_MESSAGE`
+- [X] T006a [P] Create `app/guardrails/config.py` with configurable response messages (OFF_TOPIC_REFUSAL, TOXICITY_WARNING, ERROR_MESSAGE) loadable from environment variables or defaults
+- [X] T007 [P] Add Google Style docstring to `GuardrailResult` model explaining purpose and usage
+- [X] T008 [P] Unit test for `GuardrailResult` model validation in `tests/test_guardrails.py` (test field consistency)
 
 **Checkpoint**: Foundation ready - GuardrailResult model is defined and validated. User story implementation can now begin in parallel.
 
@@ -51,20 +51,20 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [P] [US1] Implement `check_toxicity(message: str) -> str | None` function in `app/guardrails/guardrails.py`
-- [ ] T010 [US1] Create system prompt for toxicity classification (strict binary "safe"/"toxic" output) in `check_toxicity()`
-- [ ] T011 [US1] Implement OpenAI `gpt-4o-mini` API call in `check_toxicity()` with temperature=0, max_tokens=10
-- [ ] T012 [US1] Add 5-second timeout to OpenAI call in `check_toxicity()`
-- [ ] T013 [US1] Implement response parsing: return `TOXICITY_WARNING` if "toxic", `None` if "safe"
-- [ ] T014 [US1] Add try-except block to catch OpenAI errors and timeouts (fail-closed behavior)
-- [ ] T015 [US1] Add Google Style docstring to `check_toxicity()` with examples
+- [X] T009 [P] [US1] Implement `check_toxicity(message: str) -> str | None` function in `app/guardrails/guardrails.py`
+- [X] T010 [US1] Create system prompt for toxicity classification (strict binary "safe"/"toxic" output) in `check_toxicity()`
+- [X] T011 [US1] Implement OpenAI `gpt-4o-mini` API call in `check_toxicity()` with temperature=0, max_tokens=10
+- [X] T012 [US1] Add 5-second timeout to OpenAI call in `check_toxicity()`
+- [X] T013 [US1] Implement response parsing: return `TOXICITY_WARNING` if "toxic", `None` if "safe"
+- [X] T014 [US1] Add try-except block to catch OpenAI errors and timeouts (fail-closed behavior)
+- [X] T015 [US1] Add Google Style docstring to `check_toxicity()` with examples
 
 ### Tests for User Story 1
 
-- [ ] T016 [P] [US1] Unit test: Mock LLM to return "toxic" and verify `check_toxicity()` returns warning message in `tests/test_guardrails.py`
-- [ ] T017 [P] [US1] Unit test: Mock LLM to return "safe" and verify `check_toxicity()` returns `None` in `tests/test_guardrails.py`
-- [ ] T018 [P] [US1] Unit test: Mock LLM to raise timeout exception and verify `check_toxicity()` returns error message (fail-closed) in `tests/test_guardrails.py`
-- [ ] T019 [P] [US1] Integration test: Test `check_toxicity()` with real API call using sample toxic messages in `tests/test_guardrails.py`
+- [X] T016 [P] [US1] Unit test: Mock LLM to return "toxic" and verify `check_toxicity()` returns warning message in `tests/test_guardrails.py`
+- [X] T017 [P] [US1] Unit test: Mock LLM to return "safe" and verify `check_toxicity()` returns `None` in `tests/test_guardrails.py`
+- [X] T018 [P] [US1] Unit test: Mock LLM to raise timeout exception and verify `check_toxicity()` returns error message (fail-closed) in `tests/test_guardrails.py`
+- [X] T019 [P] [US1] Integration test: Test `check_toxicity()` with real API call using sample toxic messages in `tests/test_guardrails.py`
 
 **Checkpoint**: Toxic language detection is fully functional. Messages with profanity/threats are blocked, normal messages proceed.
 
@@ -78,20 +78,20 @@
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Implement `check_topic(message: str) -> str | None` function in `app/guardrails/guardrails.py`
-- [ ] T021 [US2] Create system prompt for topic classification defining banking scope (accounts, loans, cards, transfers, balance, IBAN, transactions, fraud) in `check_topic()`
-- [ ] T022 [US2] Implement OpenAI `gpt-4o-mini` API call in `check_topic()` with temperature=0, max_tokens=10
-- [ ] T023 [US2] Add 5-second timeout to OpenAI call in `check_topic()`
-- [ ] T024 [US2] Implement response parsing: return `OFF_TOPIC_REFUSAL` if "off_topic", `None` if "on_topic"
-- [ ] T025 [US2] Add try-except block to catch OpenAI errors and timeouts (fail-closed behavior)
-- [ ] T026 [US2] Add Google Style docstring to `check_topic()` with examples
+- [X] T020 [P] [US2] Implement `check_topic(message: str) -> str | None` function in `app/guardrails/guardrails.py`
+- [X] T021 [US2] Create system prompt for topic classification defining banking scope (accounts, loans, cards, transfers, balance, IBAN, transactions, fraud) in `check_topic()`
+- [X] T022 [US2] Implement OpenAI `gpt-4o-mini` API call in `check_topic()` with temperature=0, max_tokens=10
+- [X] T023 [US2] Add 5-second timeout to OpenAI call in `check_topic()`
+- [X] T024 [US2] Implement response parsing: return `OFF_TOPIC_REFUSAL` if "off_topic", `None` if "on_topic"
+- [X] T025 [US2] Add try-except block to catch OpenAI errors and timeouts (fail-closed behavior)
+- [X] T026 [US2] Add Google Style docstring to `check_topic()` with examples
 
 ### Tests for User Story 2
 
-- [ ] T027 [P] [US2] Unit test: Mock LLM to return "off_topic" and verify `check_topic()` returns refusal message in `tests/test_guardrails.py`
-- [ ] T028 [P] [US2] Unit test: Mock LLM to return "on_topic" and verify `check_topic()` returns `None` in `tests/test_guardrails.py`
-- [ ] T029 [P] [US2] Unit test: Mock LLM to raise timeout exception and verify `check_topic()` returns error message (fail-closed) in `tests/test_guardrails.py`
-- [ ] T030 [P] [US2] Integration test: Test `check_topic()` with real API call using sample off-topic and banking messages in `tests/test_guardrails.py`
+- [X] T027 [P] [US2] Unit test: Mock LLM to return "off_topic" and verify `check_topic()` returns refusal message in `tests/test_guardrails.py`
+- [X] T028 [P] [US2] Unit test: Mock LLM to return "on_topic" and verify `check_topic()` returns `None` in `tests/test_guardrails.py`
+- [X] T029 [P] [US2] Unit test: Mock LLM to raise timeout exception and verify `check_topic()` returns error message (fail-closed) in `tests/test_guardrails.py`
+- [X] T030 [P] [US2] Integration test: Test `check_topic()` with real API call using sample off-topic and banking messages in `tests/test_guardrails.py`
 
 **Checkpoint**: Topic filtering is fully functional. Off-topic requests are politely declined, banking queries proceed normally.
 
@@ -105,25 +105,25 @@
 
 ### Implementation for User Story 3
 
-- [ ] T031 [P] [US3] Implement `check_pii(response: str, is_authenticated: bool) -> str` function in `app/guardrails/guardrails.py`
-- [ ] T032 [US3] Compile regex pattern for phone numbers: `r'\+?[0-9\s\-\(\)]{7,15}'` at module level
-- [ ] T033 [US3] Compile regex pattern for IBANs: `r'[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}'` at module level
-- [ ] T034 [US3] Implement early return: if `is_authenticated=True`, return `response` unchanged
-- [ ] T035 [US3] Apply `re.sub()` to replace all phone number matches with `[REDACTED]`
-- [ ] T036 [US3] Apply `re.sub()` to replace all IBAN matches with `[REDACTED]`
-- [ ] T037 [US3] Return sanitized response string
-- [ ] T038 [US3] Add Google Style docstring to `check_pii()` with examples
+- [X] T031 [P] [US3] Implement `check_pii(response: str, is_authenticated: bool) -> str` function in `app/guardrails/guardrails.py`
+- [X] T032 [US3] Compile regex pattern for phone numbers: `r'\+?[0-9\s\-\(\)]{7,15}'` at module level
+- [X] T033 [US3] Compile regex pattern for IBANs: `r'[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}([A-Z0-9]?){0,16}'` at module level
+- [X] T034 [US3] Implement early return: if `is_authenticated=True`, return `response` unchanged
+- [X] T035 [US3] Apply `re.sub()` to replace all phone number matches with `[REDACTED]`
+- [X] T036 [US3] Apply `re.sub()` to replace all IBAN matches with `[REDACTED]`
+- [X] T037 [US3] Return sanitized response string
+- [X] T038 [US3] Add Google Style docstring to `check_pii()` with examples
 
 ### Tests for User Story 3
 
-- [ ] T039 [P] [US3] Unit test: Verify `check_pii()` with phone number and `is_authenticated=False` returns `[REDACTED]` in `tests/test_guardrails.py`
-- [ ] T040 [P] [US3] Unit test: Verify `check_pii()` with IBAN and `is_authenticated=False` returns `[REDACTED]` in `tests/test_guardrails.py`
-- [ ] T041 [P] [US3] Unit test: Verify `check_pii()` with phone number and `is_authenticated=True` returns original in `tests/test_guardrails.py`
-- [ ] T042 [P] [US3] Unit test: Verify `check_pii()` with IBAN and `is_authenticated=True` returns original in `tests/test_guardrails.py`
-- [ ] T043 [P] [US3] Unit test: Verify `check_pii()` with multiple PII instances all get redacted in `tests/test_guardrails.py`
-- [ ] T044 [P] [US3] Unit test: Verify `check_pii()` with no PII returns response unchanged in `tests/test_guardrails.py`
-- [ ] T045 [P] [US3] Integration test: Test `check_pii()` with various international phone formats (E.164) in `tests/test_guardrails.py`
-- [ ] T046 [P] [US3] Integration test: Test `check_pii()` with various IBAN formats from different European countries in `tests/test_guardrails.py`
+- [X] T039 [P] [US3] Unit test: Verify `check_pii()` with phone number and `is_authenticated=False` returns `[REDACTED]` in `tests/test_guardrails.py`
+- [X] T040 [P] [US3] Unit test: Verify `check_pii()` with IBAN and `is_authenticated=False` returns `[REDACTED]` in `tests/test_guardrails.py`
+- [X] T041 [P] [US3] Unit test: Verify `check_pii()` with phone number and `is_authenticated=True` returns original in `tests/test_guardrails.py`
+- [X] T042 [P] [US3] Unit test: Verify `check_pii()` with IBAN and `is_authenticated=True` returns original in `tests/test_guardrails.py`
+- [X] T043 [P] [US3] Unit test: Verify `check_pii()` with multiple PII instances all get redacted in `tests/test_guardrails.py`
+- [X] T044 [P] [US3] Unit test: Verify `check_pii()` with no PII returns response unchanged in `tests/test_guardrails.py`
+- [X] T045 [P] [US3] Integration test: Test `check_pii()` with various international phone formats (E.164) in `tests/test_guardrails.py`
+- [X] T046 [P] [US3] Integration test: Test `check_pii()` with various IBAN formats from different European countries in `tests/test_guardrails.py`
 
 **Checkpoint**: PII protection is fully functional. Sensitive data is redacted for unauthenticated users, visible for authenticated users.
 
@@ -135,22 +135,22 @@
 
 **⚠️ CRITICAL**: This phase integrates all three user stories into the public API that agents will call
 
-- [ ] T047 Implement `run_guardrails(message: str, proposed_response: str, is_authenticated: bool) -> GuardrailResult` function in `app/guardrails/guardrails.py`
-- [ ] T048 Call `check_toxicity(message)` first in `run_guardrails()`; if returns message, return `GuardrailResult(is_safe=False, blocked_reason="toxic", safe_response=<msg>, sanitised_response="")`
-- [ ] T049 Call `check_topic(message)` second in `run_guardrails()`; if returns message, return `GuardrailResult(is_safe=False, blocked_reason="off_topic", safe_response=<msg>, sanitised_response="")`
-- [ ] T050 Call `check_pii(proposed_response, is_authenticated)` last in `run_guardrails()`
-- [ ] T051 Return `GuardrailResult(is_safe=True, blocked_reason=None, safe_response=None, sanitised_response=<sanitized>)` from `run_guardrails()`
-- [ ] T052 Wrap entire `run_guardrails()` in try-except to catch unexpected exceptions and return error `GuardrailResult`
-- [ ] T053 Add Google Style docstring to `run_guardrails()` with comprehensive examples per contract specification
-- [ ] T054 Export `run_guardrails` and `GuardrailResult` from `app/guardrails/__init__.py`
+- [X] T047 Implement `run_guardrails(message: str, proposed_response: str, is_authenticated: bool) -> GuardrailResult` function in `app/guardrails/guardrails.py`
+- [X] T048 Call `check_toxicity(message)` first in `run_guardrails()`; if returns message, return `GuardrailResult(is_safe=False, blocked_reason="toxic", safe_response=<msg>, sanitised_response="")`
+- [X] T049 Call `check_topic(message)` second in `run_guardrails()`; if returns message, return `GuardrailResult(is_safe=False, blocked_reason="off_topic", safe_response=<msg>, sanitised_response="")`
+- [X] T050 Call `check_pii(proposed_response, is_authenticated)` last in `run_guardrails()`
+- [X] T051 Return `GuardrailResult(is_safe=True, blocked_reason=None, safe_response=None, sanitised_response=<sanitized>)` from `run_guardrails()`
+- [X] T052 Wrap entire `run_guardrails()` in try-except to catch unexpected exceptions and return error `GuardrailResult`
+- [X] T053 Add Google Style docstring to `run_guardrails()` with comprehensive examples per contract specification
+- [X] T054 Export `run_guardrails` and `GuardrailResult` from `app/guardrails/__init__.py`
 
 ### Integration Tests
 
-- [ ] T055 [P] Integration test: Verify `run_guardrails()` with toxic message short-circuits before topic check in `tests/test_guardrails.py`
-- [ ] T056 [P] Integration test: Verify `run_guardrails()` with off-topic message short-circuits before PII check in `tests/test_guardrails.py`
-- [ ] T057 [P] Integration test: Verify `run_guardrails()` with safe message runs all checks and returns sanitized response in `tests/test_guardrails.py`
-- [ ] T058 [P] Integration test: Verify `run_guardrails()` handles concurrent calls correctly in `tests/test_guardrails.py`
-- [ ] T059 [P] Integration test: End-to-end test with real LLM calls for all three scenarios (toxic, off-topic, PII) in `tests/test_guardrails.py`
+- [X] T055 [P] Integration test: Verify `run_guardrails()` with toxic message short-circuits before topic check in `tests/test_guardrails.py`
+- [X] T056 [P] Integration test: Verify `run_guardrails()` with off-topic message short-circuits before PII check in `tests/test_guardrails.py`
+- [X] T057 [P] Integration test: Verify `run_guardrails()` with safe message runs all checks and returns sanitized response in `tests/test_guardrails.py`
+- [X] T058 [P] Integration test: Verify `run_guardrails()` handles concurrent calls correctly in `tests/test_guardrails.py`
+- [X] T059 [P] Integration test: End-to-end test with real LLM calls for all three scenarios (toxic, off-topic, PII) in `tests/test_guardrails.py`
 
 **Checkpoint**: All user stories are integrated. Orchestrator handles priority ordering and returns unified results.
 
@@ -160,17 +160,17 @@
 
 **Purpose**: Non-functional requirements, documentation, and production readiness
 
-- [ ] T060 [P] Add basic metrics logging to `run_guardrails()`: emit block count by type (toxic, off_topic), PII redaction count, latency using Python logging module at INFO level with structured format (e.g., JSON)
-- [ ] T061 [P] Add error rate metric to `run_guardrails()` for monitoring guardrail failures using Python logging module
-- [ ] T062 [P] Verify no message content is logged in any function (privacy requirement)
-- [ ] T063 [P] Performance test: Verify p95 latency <500ms for `run_guardrails()` with mocked LLM in `tests/test_guardrails.py`
-- [ ] T064 [P] Performance test: Verify average latency <200ms for `run_guardrails()` with mocked LLM in `tests/test_guardrails.py`
-- [ ] T065 [P] Add module-level docstring to `app/guardrails/guardrails.py` explaining purpose and architecture
-- [ ] T066 [P] Verify all functions follow Google Style docstring format per constitution
+- [X] T060 [P] Add basic metrics logging to `run_guardrails()`: emit block count by type (toxic, off_topic), PII redaction count, latency using Python logging module at INFO level with structured format (e.g., JSON)
+- [X] T061 [P] Add error rate metric to `run_guardrails()` for monitoring guardrail failures using Python logging module
+- [X] T062 [P] Verify no message content is logged in any function (privacy requirement)
+- [X] T063 [P] Performance test: Verify p95 latency <500ms for `run_guardrails()` with mocked LLM in `tests/test_guardrails.py`
+- [X] T064 [P] Performance test: Verify average latency <200ms for `run_guardrails()` with mocked LLM in `tests/test_guardrails.py`
+- [X] T065 [P] Add module-level docstring to `app/guardrails/guardrails.py` explaining purpose and architecture
+- [X] T066 [P] Verify all functions follow Google Style docstring format per constitution
 - [ ] T067 [P] Format code with Black per constitution Section 5
-- [ ] T068 [P] Update README.md with guardrails integration instructions (link to quickstart.md)
+- [X] T068 [P] Update README.md with guardrails integration instructions (link to quickstart.md)
 - [ ] T069 [P] Create `docs/guardrails-prompt-maintenance.md` documenting how to version, update, and tune LLM system prompts for toxicity/topic classification
-- [ ] T070 [P] Add false positive rate validation test in `tests/test_guardrails.py`: test 50-100 legitimate frustrated banking messages to verify <5% false positive rate (SC-009)
+- [X] T070 [P] Add false positive rate validation test in `tests/test_guardrails.py`: test 50-100 legitimate frustrated banking messages to verify <5% false positive rate (SC-009)
 
 ---
 
