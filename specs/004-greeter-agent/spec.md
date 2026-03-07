@@ -104,3 +104,53 @@ Extracted fields MUST be merged into `collected_fields` in the state, not replac
 - The agent MUST NOT reveal the secret question to the customer before identity verification passes.
 - On the first turn, if the customer's message already contains identifying fields, the agent MUST extract and process them immediately rather than asking for them again.
 - The maximum number of total attempts (verification + secret question failures combined) is 3. After 3 failures, the conversation ends.
+
+## 8. Success Criteria
+
+The Greeter Agent implementation is considered successful when it meets the following measurable outcomes:
+
+### Functional Correctness
+- **Identity Verification Accuracy**: 100% compliance with 2-out-of-3 matching rule (at least 2 fields match exactly one user record)
+- **Authentication Success Rate**: Correct secret answers result in authentication 100% of the time
+- **Error Handling**: All edge cases (max attempts, database failures, invalid inputs) handled gracefully without crashes
+
+### User Experience
+- **Response Time**: Complete verification workflow (welcome → collect → verify → authenticate) completes within 2 seconds per turn under normal conditions
+- **Conversation Quality**: Agent responses are polite, professional, and natural (validated through user acceptance testing)
+- **Progressive Disclosure**: Customer can provide identity fields incrementally across multiple turns (1, 2, or all 3 fields at once)
+
+### Security & Safety
+- **PII Protection**: Secret answer field never exposed in responses or logs (0% exposure rate)
+- **Guardrail Compliance**: All inputs and outputs pass through safety checks (100% coverage)
+- **Attempt Limiting**: Conversation terminates after exactly 3 failed attempts (no more, no less)
+
+### System Reliability
+- **Database Resilience**: System retries exactly once on database failure and degrades gracefully
+- **State Consistency**: All state transitions follow specification (verified through integration tests)
+- **Handoff Success**: Authenticated sessions transition to Bouncer agent 100% of the time
+
+## 9. Dependencies and Assumptions
+
+### External Dependencies
+- **User Database**: Requires accessible database with User records containing: name, phone, iban, secret (question), answer
+- **LLM Service**: Requires connection to language model for response generation and field extraction
+- **Guardrails System**: Requires functional guardrail service for input/output safety checks
+- **Graph State Management**: Requires LangGraph state infrastructure with defined State schema
+
+### Technical Assumptions
+- **State Schema**: Assumes GraphState includes: messages, collected_fields, verification_attempts, verified_user, is_authenticated, current_agent, conversation_ended
+- **Database Query Capability**: Assumes database supports flexible field matching (2-out-of-3 with case-insensitive name lookup)
+- **LLM Capabilities**: Assumes LLM can extract structured data (name, phone, IBAN) from free-text with reasonable accuracy
+- **Message Format**: Assumes conversation history stored as list of structured messages (HumanMessage, AIMessage)
+
+### Integration Assumptions
+- **Bouncer Agent Exists**: Assumes Bouncer agent is implemented and can receive authenticated sessions
+- **Graph Routing**: Assumes LangGraph pipeline can route from Greeter to Bouncer based on is_authenticated flag
+- **Single Session Model**: Assumes each conversation is isolated (no cross-session state sharing)
+- **Synchronous Processing**: Assumes agent processes one message at a time per session
+
+### Business Assumptions
+- **Customer Cooperation**: Assumes customers will provide requested identity information
+- **Database Coverage**: Assumes all legitimate customers have User records in the database
+- **Secret Question Security**: Assumes secret questions and answers are pre-configured for each user
+- **English Language**: Assumes all interactions occur in English (no multi-language support)

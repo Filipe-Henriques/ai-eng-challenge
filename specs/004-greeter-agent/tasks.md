@@ -21,9 +21,9 @@
 
 **Purpose**: Project structure and agent file scaffolding
 
-- [ ] T001 Create `app/agents/` directory if it doesn't exist
-- [ ] T002 Create `app/agents/__init__.py` with empty content
-- [ ] T003 Create `tests/test_greeter.py` with pytest imports and basic structure
+- [X] T001 Create `app/agents/` directory if it doesn't exist
+- [X] T002 Create `app/agents/__init__.py` with empty content
+- [X] T003 Create `tests/test_greeter.py` with pytest imports and basic structure
 
 ---
 
@@ -33,9 +33,9 @@
 
 **⚠️ CRITICAL**: These must be complete before agent implementation can begin
 
-- [ ] T004 Add `DatabaseUnavailableError` exception class to `app/models/database.py`
-- [ ] T005 Implement `find_user_with_retry()` helper function in `app/models/database.py` with single retry logic (NEW wrapper around existing `find_user_by_fields()`)
-- [ ] T006 Add docstrings and type hints to retry function following Google Style
+- [X] T004 Add `DatabaseUnavailableError` exception class to `app/models/database.py`
+- [X] T005 Implement `find_user_with_retry()` helper function in `app/models/database.py` with single retry logic (NEW wrapper around existing `find_user_by_fields()`)
+- [X] T006 Add docstrings and type hints to retry function following Google Style
 
 **Checkpoint**: Foundation ready - agent implementation can now begin
 
@@ -51,17 +51,17 @@
 
 > **Write tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T007 [P] [INC1] Write test for welcome message on first turn in `tests/test_greeter.py`
-- [ ] T008 [P] [INC1] Write test for guardrail rejection (unsafe input) in `tests/test_greeter.py`
+- [X] T007 [P] [INC1] Write test for welcome message on first turn in `tests/test_greeter.py`
+- [X] T008 [P] [INC1] Write test for guardrail rejection (unsafe input) in `tests/test_greeter.py`
 
 ### Implementation for Increment 1
 
-- [ ] T009 [INC1] Create `app/agents/greeter.py` with module docstring
-- [ ] T010 [INC1] Define `ExtractedInfo` Pydantic model in `app/agents/greeter.py`
-- [ ] T011 [INC1] Implement `greeter_agent(state: State) -> dict` function skeleton in `app/agents/greeter.py`
-- [ ] T012 [INC1] Add input guardrail check logic in `greeter_agent()` using `run_guardrails()`
-- [ ] T013 [INC1] Add welcome message logic for first turn (when `len(state["messages"]) == 1`)
-- [ ] T014 [INC1] Add max attempts check (if `verification_attempts >= 3`, end conversation) in `greeter_agent()`
+- [X] T009 [INC1] Create `app/agents/greeter.py` with module docstring
+- [X] T010 [INC1] Define `ExtractedInfo` Pydantic model in `app/agents/greeter.py`
+- [X] T011 [INC1] Implement `greeter_agent(state: State) -> dict` function skeleton in `app/agents/greeter.py`
+- [X] T012 [INC1] Add input guardrail check logic in `greeter_agent()` using `run_guardrails()`
+- [X] T013 [INC1] Add welcome message logic for first turn (when `len(state["messages"]) == 1`)
+- [X] T014 [INC1] Add max attempts check (if `verification_attempts >= 3`, end conversation) in `greeter_agent()`
 
 **Checkpoint**: Agent handles welcome and guardrail rejection. Tests pass.
 
@@ -75,17 +75,17 @@
 
 ### Tests for Increment 2
 
-- [ ] T015 [P] [INC2] Write test for field extraction (single message with multiple fields) in `tests/test_greeter.py`
-- [ ] T016 [P] [INC2] Write test for incremental field collection (multiple turns) in `tests/test_greeter.py`
-- [ ] T017 [P] [INC2] Write test for field merge behavior (non-None values only) in `tests/test_greeter.py`
+- [X] T015 [P] [INC2] Write test for field extraction (single message with multiple fields) in `tests/test_greeter.py`
+- [X] T016 [P] [INC2] Write test for incremental field collection (multiple turns) in `tests/test_greeter.py`
+- [X] T017 [P] [INC2] Write test for field merge behavior (non-None values only) in `tests/test_greeter.py`
 
 ### Implementation for Increment 2
 
-- [ ] T018 [INC2] Add LLM initialization (`ChatOpenAI` with `gpt-4o-mini`, temperature=0) in `greeter_agent()`
-- [ ] T019 [INC2] Implement field extraction using `with_structured_output(ExtractedInfo)` in `greeter_agent()`
-- [ ] T020 [INC2] Add system prompt for field extraction with instructions in `greeter_agent()`
-- [ ] T021 [INC2] Implement field merge logic (update `collected_fields` with non-None extracted values) in `greeter_agent()`
-- [ ] T022 [INC2] Add response logic when insufficient fields (<2 non-None) collected in `greeter_agent()`
+- [X] T018 [INC2] Add LLM initialization (`ChatOpenAI` with `gpt-4o-mini`, temperature=0) in `greeter_agent()`
+- [X] T019 [INC2] Implement field extraction using `with_structured_output(ExtractedInfo)` in `greeter_agent()`
+- [X] T020 [INC2] Add system prompt for field extraction with instructions in `greeter_agent()`
+- [X] T021 [INC2] Implement field merge logic (update `collected_fields` with non-None extracted values) in `greeter_agent()`
+- [X] T022 [INC2] Add response logic when insufficient fields (<2 non-None) collected in `greeter_agent()`
 
 **Checkpoint**: Agent extracts and collects fields incrementally. Tests pass.
 
@@ -99,18 +99,18 @@
 
 ### Tests for Increment 3
 
-- [ ] T023 [P] [INC3] Write test for successful 2/3 verification in `tests/test_greeter.py`
-- [ ] T024 [P] [INC3] Write test for failed verification (no user match) in `tests/test_greeter.py`
-- [ ] T025 [P] [INC3] Write test for database failure with retry in `tests/test_greeter.py`
-- [ ] T026 [P] [INC3] Write test for `verification_attempts` increment on failure in `tests/test_greeter.py`
+- [X] T023 [P] [INC3] Write test for successful 2/3 verification in `tests/test_greeter.py`
+- [X] T024 [P] [INC3] Write test for failed verification (no user match) in `tests/test_greeter.py`
+- [X] T025 [P] [INC3] Write test for database failure with retry in `tests/test_greeter.py`
+- [X] T026 [P] [INC3] Write test for `verification_attempts` increment on failure in `tests/test_greeter.py`
 
 ### Implementation for Increment 3
 
-- [ ] T027 [INC3] Add logic to count non-None fields in `collected_fields` in `greeter_agent()`
-- [ ] T028 [INC3] Implement verification attempt when `non_none_count >= 2` using `find_user_with_retry()` in `greeter_agent()`
-- [ ] T029 [INC3] Add database error handling (catch `DatabaseUnavailableError`, set `conversation_ended=True`) in `greeter_agent()`
-- [ ] T030 [INC3] Implement verification failure logic (increment `verification_attempts`, return retry message) in `greeter_agent()`
-- [ ] T031 [INC3] Implement verification success logic (set `verified_user`, ask secret question) in `greeter_agent()`
+- [X] T027 [INC3] Add logic to count non-None fields in `collected_fields` in `greeter_agent()`
+- [X] T028 [INC3] Implement verification attempt when `non_none_count >= 2` using `find_user_with_retry()` in `greeter_agent()`
+- [X] T029 [INC3] Add database error handling (catch `DatabaseUnavailableError`, set `conversation_ended=True`) in `greeter_agent()`
+- [X] T030 [INC3] Implement verification failure logic (increment `verification_attempts`, return retry message) in `greeter_agent()`
+- [X] T031 [INC3] Implement verification success logic (set `verified_user`, ask secret question) in `greeter_agent()`
 
 **Checkpoint**: Agent verifies identity with 2/3 rule, handles all error cases. Tests pass.
 
@@ -124,17 +124,17 @@
 
 ### Tests for Increment 4
 
-- [ ] T032 [P] [INC4] Write test for secret question asked after verification in `tests/test_greeter.py`
-- [ ] T033 [P] [INC4] Write test for correct secret answer (case-insensitive) in `tests/test_greeter.py`
-- [ ] T034 [P] [INC4] Write test for incorrect secret answer in `tests/test_greeter.py`
-- [ ] T035 [P] [INC4] Write test for authentication success state transition in `tests/test_greeter.py`
+- [X] T032 [P] [INC4] Write test for secret question asked after verification in `tests/test_greeter.py`
+- [X] T033 [P] [INC4] Write test for correct secret answer (case-insensitive) in `tests/test_greeter.py`
+- [X] T034 [P] [INC4] Write test for incorrect secret answer in `tests/test_greeter.py`
+- [X] T035 [P] [INC4] Write test for authentication success state transition in `tests/test_greeter.py`
 
 ### Implementation for Increment 4
 
-- [ ] T036 [INC4] Add logic to check if `verified_user` is set and `is_authenticated` is False in `greeter_agent()`
-- [ ] T037 [INC4] Implement secret answer extraction and case-insensitive comparison in `greeter_agent()`
-- [ ] T038 [INC4] Implement authentication success logic (set `is_authenticated=True`, `current_agent="bouncer"`) in `greeter_agent()`
-- [ ] T039 [INC4] Implement authentication failure logic (increment `verification_attempts`, return retry message) in `greeter_agent()`
+- [X] T036 [INC4] Add logic to check if `verified_user` is set and `is_authenticated` is False in `greeter_agent()`
+- [X] T037 [INC4] Implement secret answer extraction and case-insensitive comparison in `greeter_agent()`
+- [X] T038 [INC4] Implement authentication success logic (set `is_authenticated=True`, `current_agent="bouncer"`) in `greeter_agent()`
+- [X] T039 [INC4] Implement authentication failure logic (increment `verification_attempts`, return retry message) in `greeter_agent()`
 
 **Checkpoint**: Agent handles complete authentication flow. Tests pass.
 
@@ -148,17 +148,17 @@
 
 ### Tests for Increment 5
 
-- [ ] T040 [P] [INC5] Write test for output guardrail application in `tests/test_greeter.py`
-- [ ] T041 [P] [INC5] Write test for max attempts termination (3 failures) in `tests/test_greeter.py`
-- [ ] T042 [P] [INC5] Write test for conversation flow with all state transitions in `tests/test_greeter.py`
+- [X] T040 [P] [INC5] Write test for output guardrail application in `tests/test_greeter.py`
+- [X] T041 [P] [INC5] Write test for max attempts termination (3 failures) in `tests/test_greeter.py`
+- [X] T042 [P] [INC5] Write test for conversation flow with all state transitions in `tests/test_greeter.py`
 
 ### Implementation for Increment 5
 
-- [ ] T043 [INC5] Add output guardrail check to all response paths in `greeter_agent()`
-- [ ] T044 [INC5] Add comprehensive Google-style docstring to `greeter_agent()` function
-- [ ] T045 [INC5] Add Google-style docstring to `ExtractedInfo` class
-- [ ] T046 [INC5] Review and refactor for code clarity and error handling completeness in `app/agents/greeter.py`
-- [ ] T047 [INC5] Add logging statements for key operations (verification attempts, database calls) in `greeter_agent()`
+- [X] T043 [INC5] Add output guardrail check to all response paths in `greeter_agent()`
+- [X] T044 [INC5] Add comprehensive Google-style docstring to `greeter_agent()` function
+- [X] T045 [INC5] Add Google-style docstring to `ExtractedInfo` class
+- [X] T046 [INC5] Review and refactor for code clarity and error handling completeness in `app/agents/greeter.py`
+- [X] T047 [INC5] Add logging statements for key operations (verification attempts, database calls) in `greeter_agent()`
 
 **Checkpoint**: Agent fully implements spec, all tests pass, code documented.
 
@@ -168,11 +168,11 @@
 
 **Purpose**: Wire Greeter Agent into LangGraph pipeline
 
-- [ ] T048 Add greeter node to graph builder in `app/graph/pipeline.py`
-- [ ] T049 Set greeter as entry point in graph builder in `app/graph/pipeline.py`
-- [ ] T050 Implement `route_after_greeter()` conditional edge function in `app/graph/pipeline.py`
-- [ ] T051 Add conditional edges for greeter routing (bouncer/greeter/end) in `app/graph/pipeline.py`
-- [ ] T052 Write integration test for full greeter flow in graph in `tests/test_greeter.py`
+- [X] T048 Add greeter node to graph builder in `app/graph/pipeline.py`
+- [X] T049 Set greeter as entry point in graph builder in `app/graph/pipeline.py`
+- [X] T050 Implement `route_after_greeter()` conditional edge function in `app/graph/pipeline.py`
+- [X] T051 Add conditional edges for greeter routing (bouncer/greeter/end) in `app/graph/pipeline.py`
+- [X] T052 Write integration test for full greeter flow in graph in `tests/test_greeter.py`
 
 **Checkpoint**: Greeter integrated into LangGraph pipeline, end-to-end flow works.
 
@@ -182,12 +182,14 @@
 
 **Purpose**: Final validation and documentation
 
-- [ ] T053 [P] Run all greeter tests with coverage report (`pytest tests/test_greeter.py --cov`)
-- [ ] T054 [P] Validate implementation against spec.md checklist
-- [ ] T055 [P] Follow quickstart.md validation steps
+- [X] T053 [P] Run all greeter tests with coverage report (`pytest tests/test_greeter.py --cov`)
+- [X] T054 [P] Validate implementation against spec.md checklist
+- [X] T055 [P] Follow quickstart.md validation steps
 - [ ] T056 Manual testing with real LLM (test conversation flows)
-- [ ] T057 Code review for constitution compliance (all 5 principles)
-- [ ] T058 Format code with Black (`black app/agents/greeter.py tests/test_greeter.py`)
+- [X] T057 Code review for constitution compliance (all 5 principles)
+- [X] T058 Format code with Black (`black app/agents/greeter.py tests/test_greeter.py`)
+
+**Note**: T056 (manual testing with real LLM) requires OPENAI_API_KEY to be set and can be done separately. All other tasks complete.
 
 ---
 
