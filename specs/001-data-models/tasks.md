@@ -31,10 +31,10 @@
 
 ### Tasks
 
-- [ ] T001 Create app/ directory in project root
-- [ ] T002 Create app/models/ directory
-- [ ] T003 Create tests/ directory in project root
-- [ ] T004 Create app/models/__init__.py (empty file for Python package)
+- [X] T001 Create app/ directory in project root
+- [X] T002 Create app/models/ directory
+- [X] T003 Create tests/ directory in project root
+- [X] T004 Create app/models/__init__.py (empty file for Python package)
 
 ---
 
@@ -46,7 +46,7 @@
 
 ### Tasks
 
-- [ ] T005 Create app/models/schemas.py with Pydantic BaseModel import
+- [X] T005 Create app/models/schemas.py with Pydantic BaseModel import
 
 ---
 
@@ -61,15 +61,15 @@
 
 ### Implementation Tasks
 
-- [ ] T006 [P] [US1] Implement ChatRequest model in app/models/schemas.py (fields: session_id, message)
-- [ ] T007 [P] [US1] Implement ChatResponse model in app/models/schemas.py (fields: session_id, response, agent)
+- [X] T006 [P] [US1] Implement ChatRequest model in app/models/schemas.py (fields: session_id, message)
+- [X] T007 [P] [US1] Implement ChatResponse model in app/models/schemas.py (fields: session_id, response, agent)
 
 ### Testing Tasks
 
-- [ ] T008 [US1] Create tests/test_data_models.py with test_chat_request_valid()
-- [ ] T009 [US1] Add test_chat_request_missing_field() to tests/test_data_models.py
-- [ ] T010 [US1] Add test_chat_response_valid() to tests/test_data_models.py
-- [ ] T011 [US1] Add test_chat_response_missing_field() to tests/test_data_models.py
+- [X] T008 [US1] Create tests/test_data_models.py with test_chat_request_valid()
+- [X] T009 [US1] Add test_chat_request_missing_field() to tests/test_data_models.py
+- [X] T010 [US1] Add test_chat_response_valid() to tests/test_data_models.py
+- [X] T011 [US1] Add test_chat_response_missing_field() to tests/test_data_models.py
 
 ---
 
@@ -84,18 +84,18 @@
 
 ### Implementation Tasks
 
-- [ ] T012 [US2] Implement User model in app/models/schemas.py (fields: name, phone, iban, secret, answer)
-- [ ] T013 [US2] Create app/models/database.py with MOCK_USERS list (Lisa, John, Maria)
-- [ ] T014 [US2] Implement find_user_by_fields(fields: dict) in app/models/database.py with 2-out-of-3 matching logic
+- [X] T012 [US2] Implement User model in app/models/schemas.py (fields: name, phone, iban, secret, answer)
+- [X] T013 [US2] Create app/models/database.py with MOCK_USERS list (Lisa, John, Maria)
+- [X] T014 [US2] Implement find_user_by_fields(fields: dict) in app/models/database.py with 2-out-of-3 matching logic
 
 ### Testing Tasks
 
-- [ ] T015 [US2] Add test_find_user_by_fields_two_matches() to tests/test_data_models.py (name + phone)
-- [ ] T016 [US2] Add test_find_user_by_fields_three_matches() to tests/test_data_models.py (all fields)
-- [ ] T017 [US2] Add test_find_user_by_fields_one_match() to tests/test_data_models.py (returns None)
-- [ ] T018 [US2] Add test_find_user_by_fields_no_match() to tests/test_data_models.py (returns None)
-- [ ] T019 [US2] Add test_find_user_by_fields_case_insensitive() to tests/test_data_models.py (name: "lisa" matches "Lisa")
-- [ ] T020 [US2] Add test_user_model_missing_field() to tests/test_data_models.py (Pydantic ValidationError)
+- [X] T015 [US2] Add test_find_user_by_fields_two_matches() to tests/test_data_models.py (name + phone)
+- [X] T016 [US2] Add test_find_user_by_fields_three_matches() to tests/test_data_models.py (all fields)
+- [X] T017 [US2] Add test_find_user_by_fields_one_match() to tests/test_data_models.py (returns None)
+- [X] T018 [US2] Add test_find_user_by_fields_no_match() to tests/test_data_models.py (returns None)
+- [X] T019 [US2] Add test_find_user_by_fields_case_insensitive() to tests/test_data_models.py (name: "lisa" matches "Lisa")
+- [X] T020 [US2] Add test_user_model_missing_field() to tests/test_data_models.py (Pydantic ValidationError)
 
 ---
 
@@ -110,16 +110,16 @@
 
 ### Implementation Tasks
 
-- [ ] T021 [US3] Implement Account model in app/models/schemas.py (fields: iban, premium)
-- [ ] T022 [US3] Add MOCK_ACCOUNTS list to app/models/database.py (Lisa premium=True, John premium=False)
-- [ ] T023 [US3] Implement find_account_by_iban(iban: str) in app/models/database.py
+- [X] T021 [US3] Implement Account model in app/models/schemas.py (fields: iban, premium)
+- [X] T022 [US3] Add MOCK_ACCOUNTS list to app/models/database.py (Lisa premium=True, John premium=False)
+- [X] T023 [US3] Implement find_account_by_iban(iban: str) in app/models/database.py
 
 ### Testing Tasks
 
-- [ ] T024 [US3] Add test_find_account_by_iban_premium() to tests/test_data_models.py (Lisa's IBAN → premium=True)
-- [ ] T025 [US3] Add test_find_account_by_iban_regular() to tests/test_data_models.py (John's IBAN → premium=False)
-- [ ] T026 [US3] Add test_find_account_by_iban_not_found() to tests/test_data_models.py (Maria's IBAN → None)
-- [ ] T027 [US3] Add test_find_account_by_iban_unknown() to tests/test_data_models.py (invalid IBAN → None)
+- [X] T024 [US3] Add test_find_account_by_iban_premium() to tests/test_data_models.py (Lisa's IBAN → premium=True)
+- [X] T025 [US3] Add test_find_account_by_iban_regular() to tests/test_data_models.py (John's IBAN → premium=False)
+- [X] T026 [US3] Add test_find_account_by_iban_not_found() to tests/test_data_models.py (Maria's IBAN → None)
+- [X] T027 [US3] Add test_find_account_by_iban_unknown() to tests/test_data_models.py (invalid IBAN → None)
 
 ---
 
@@ -129,12 +129,12 @@
 
 ### Tasks
 
-- [ ] T028 Add Google-style docstrings to all models in app/models/schemas.py
-- [ ] T029 Add Google-style docstrings to all functions in app/models/database.py
-- [ ] T030 Add module-level docstrings to schemas.py and database.py
-- [ ] T031 Run pytest with coverage report (target: 100% of database.py)
-- [ ] T032 Verify all models can be imported: `from app.models.schemas import User, Account, ChatRequest, ChatResponse`
-- [ ] T033 Verify all database functions can be imported: `from app.models.database import MOCK_USERS, MOCK_ACCOUNTS, find_user_by_fields, find_account_by_iban`
+- [X] T028 Add Google-style docstrings to all models in app/models/schemas.py
+- [X] T029 Add Google-style docstrings to all functions in app/models/database.py
+- [X] T030 Add module-level docstrings to schemas.py and database.py
+- [X] T031 Run pytest with coverage report (target: 100% of database.py)
+- [X] T032 Verify all models can be imported: `from app.models.schemas import User, Account, ChatRequest, ChatResponse`
+- [X] T033 Verify all database functions can be imported: `from app.models.database import MOCK_USERS, MOCK_ACCOUNTS, find_user_by_fields, find_account_by_iban`
 
 ---
 
