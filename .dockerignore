@@ -1,0 +1,61 @@
+# Version Control
+.git/
+.gitignore
+
+# Secrets (CRITICAL - Security)
+.env
+.env.*
+*.env
+
+# Python Artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# Development Tools
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Testing
+tests/
+
+# Documentation
+*.md
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Build Artifacts
+build/
+dist/
+*.egg-info/

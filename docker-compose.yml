@@ -1,0 +1,25 @@
+services:
+  api:
+    # Build from repository root using Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Map host port 8000 to container port 8000
+    ports:
+      - "8000:8000"
+    
+    # Load environment variables from .env file
+    env_file:
+      - .env
+    
+    # Auto-restart on failure except when explicitly stopped
+    restart: unless-stopped
+    
+    # Health check configuration for monitoring
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

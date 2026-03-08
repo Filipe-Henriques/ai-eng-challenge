@@ -30,9 +30,9 @@
 
 **⚠️ CRITICAL**: No user story implementation can begin until this phase is complete
 
-- [ ] T001 [P] Replace `requirements.txt` at repository root with exact-pinned dependencies (fastapi==0.115.0, uvicorn[standard]==0.30.6, pydantic==2.9.2, langchain==0.3.0, langchain-openai==0.2.0, langgraph==0.2.28, openai==1.51.0, pytest==8.3.3, pytest-asyncio==0.24.0, httpx==0.27.2) per FR-009 (migrate from loose `>=` to exact `==` pinning for reproducible builds)
-- [ ] T002 [P] Update `pyproject.toml` at repository root to add project metadata (name="deus-bank-ai-support", version="1.0.0", requires-python=">=3.11") while preserving existing pytest configuration (asyncio_mode="auto", markers for e2e tests, testpaths=["tests"]) per FR-015
-- [ ] T003 [P] Verify `.gitignore` at repository root includes `.env` (prevent committing secrets), `__pycache__/`, `*.pyc`, `*.pyo`, `*.pyd`, `.pytest_cache/`, `.coverage`, `htmlcov/`, `.venv/`, `venv/`, `ENV/` per security requirements (file already exists with most patterns; verify completeness)
+- [X] T001 [P] Replace `requirements.txt` at repository root with exact-pinned dependencies (fastapi==0.115.0, uvicorn[standard]==0.30.6, pydantic==2.9.2, langchain==0.3.0, langchain-openai==0.2.0, langgraph==0.2.28, openai==1.51.0, pytest==8.3.3, pytest-asyncio==0.24.0, httpx==0.27.2) per FR-009 (migrate from loose `>=` to exact `==` pinning for reproducible builds)
+- [X] T002 [P] Update `pyproject.toml` at repository root to add project metadata (name="deus-bank-ai-support", version="1.0.0", requires-python=">=3.11") while preserving existing pytest configuration (asyncio_mode="auto", markers for e2e tests, testpaths=["tests"]) per FR-015
+- [X] T003 [P] Verify `.gitignore` at repository root includes `.env` (prevent committing secrets), `__pycache__/`, `*.pyc`, `*.pyo`, `*.pyd`, `.pytest_cache/`, `.coverage`, `htmlcov/`, `.venv/`, `venv/`, `ENV/` per security requirements (file already exists with most patterns; verify completeness)
 
 **Checkpoint**: Foundation ready - dependency manifest and configuration files exist. User story implementation can now begin in parallel.
 
@@ -46,23 +46,23 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [P] [US1] Create `.dockerignore` at repository root excluding: .git/, .env, `__pycache__/`, *.pyc, *.pyo, .pytest_cache/, tests/, *.md, .venv/ per FR-005 (optimizes build context and prevents secrets in image)
-- [ ] T005 [P] [US1] Create `.env.example` at repository root with template: `OPENAI_API_KEY=your_openai_api_key_here` and optional variables `LOG_LEVEL=info`, `ENVIRONMENT=dev` per FR-006 (documents required configuration)
-- [ ] T006 [US1] Create `Dockerfile` at repository root with base image `python:3.11-slim` per FR-001
-- [ ] T007 [US1] Add to `Dockerfile`: Install curl via `RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*` per FR-010 (required for health checks)
-- [ ] T008 [US1] Add to `Dockerfile`: Set `WORKDIR /app`
-- [ ] T009 [US1] Add to `Dockerfile`: Copy `requirements.txt` and run `RUN pip install --no-cache-dir -r requirements.txt` per FR-011 (layer caching optimization - dependencies before code)
-- [ ] T010 [US1] Add to `Dockerfile`: Create non-root user with `RUN useradd -m -u 1000 appuser` per FR-003 (security best practice)
-- [ ] T011 [US1] Add to `Dockerfile`: Copy application source with `COPY . .`
-- [ ] T012 [US1] Add to `Dockerfile`: Set file ownership with `RUN chown -R appuser:appuser /app` (ensures non-root user can access files)
-- [ ] T013 [US1] Add to `Dockerfile`: Switch to non-root user with `USER appuser` per FR-003
-- [ ] T014 [US1] Add to `Dockerfile`: Expose port 8000 with `EXPOSE 8000` per FR-004
-- [ ] T015 [US1] Add to `Dockerfile`: Set startup command with `CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]` per FR-004 (bind to 0.0.0.0 for external access)
-- [ ] T016 [US1] Create `docker-compose.yml` at repository root with api service definition per FR-002
-- [ ] T017 [US1] Add to `docker-compose.yml`: Build configuration with `build: .` (context=repository root, dockerfile=Dockerfile)
-- [ ] T018 [US1] Add to `docker-compose.yml`: Port mapping `ports: ["8000:8000"]` (map host:8000 to container:8000)
-- [ ] T019 [US1] Add to `docker-compose.yml`: Environment file loading with `env_file: .env` per FR-007 (runtime secret injection, not baked into image)
-- [ ] T020 [US1] Add to `docker-compose.yml`: Restart policy `restart: unless-stopped` per FR-012 (resilience - auto-restart on failure)
+- [X] T004 [P] [US1] Create `.dockerignore` at repository root excluding: .git/, .env, `__pycache__/`, *.pyc, *.pyo, .pytest_cache/, tests/, *.md, .venv/ per FR-005 (optimizes build context and prevents secrets in image)
+- [X] T005 [P] [US1] Create `.env.example` at repository root with template: `OPENAI_API_KEY=your_openai_api_key_here` and optional variables `LOG_LEVEL=info`, `ENVIRONMENT=dev` per FR-006 (documents required configuration)
+- [X] T006 [US1] Create `Dockerfile` at repository root with base image `python:3.11-slim` per FR-001
+- [X] T007 [US1] Add to `Dockerfile`: Install curl via `RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*` per FR-010 (required for health checks)
+- [X] T008 [US1] Add to `Dockerfile`: Set `WORKDIR /app`
+- [X] T009 [US1] Add to `Dockerfile`: Copy `requirements.txt` and run `RUN pip install --no-cache-dir -r requirements.txt` per FR-011 (layer caching optimization - dependencies before code)
+- [X] T010 [US1] Add to `Dockerfile`: Create non-root user with `RUN useradd -m -u 1000 appuser` per FR-003 (security best practice)
+- [X] T011 [US1] Add to `Dockerfile`: Copy application source with `COPY . .`
+- [X] T012 [US1] Add to `Dockerfile`: Set file ownership with `RUN chown -R appuser:appuser /app` (ensures non-root user can access files)
+- [X] T013 [US1] Add to `Dockerfile`: Switch to non-root user with `USER appuser` per FR-003
+- [X] T014 [US1] Add to `Dockerfile`: Expose port 8000 with `EXPOSE 8000` per FR-004
+- [X] T015 [US1] Add to `Dockerfile`: Set startup command with `CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]` per FR-004 (bind to 0.0.0.0 for external access)
+- [X] T016 [US1] Create `docker-compose.yml` at repository root with api service definition per FR-002
+- [X] T017 [US1] Add to `docker-compose.yml`: Build configuration with `build: .` (context=repository root, dockerfile=Dockerfile)
+- [X] T018 [US1] Add to `docker-compose.yml`: Port mapping `ports: ["8000:8000"]` (map host:8000 to container:8000)
+- [X] T019 [US1] Add to `docker-compose.yml`: Environment file loading with `env_file: .env` per FR-007 (runtime secret injection, not baked into image)
+- [X] T020 [US1] Add to `docker-compose.yml`: Restart policy `restart: unless-stopped` per FR-012 (resilience - auto-restart on failure)
 
 **Checkpoint**: At this point, User Story 1 is complete. Developers can run `docker compose up` and access the API locally.
 
@@ -78,11 +78,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T021 [US3] Add health check configuration to `docker-compose.yml` api service with test command: `["CMD", "curl", "-f", "http://localhost:8000/health"]` per FR-008 (queries health endpoint)
-- [ ] T022 [US3] Add to health check in `docker-compose.yml`: `interval: 30s` per FR-013 (check every 30 seconds - balances responsiveness and overhead)
-- [ ] T023 [US3] Add to health check in `docker-compose.yml`: `timeout: 10s` per FR-013 (allow 10 seconds for response under load)
-- [ ] T024 [US3] Add to health check in `docker-compose.yml`: `retries: 3` per FR-013 (3 consecutive failures before marking unhealthy - avoids false positives)
-- [ ] T025 [US3] Add to health check in `docker-compose.yml`: `start_period: 10s` per FR-014 (grace period during application initialization)
+- [X] T021 [US3] Add health check configuration to `docker-compose.yml` api service with test command: `["CMD", "curl", "-f", "http://localhost:8000/health"]` per FR-008 (queries health endpoint)
+- [X] T022 [US3] Add to health check in `docker-compose.yml`: `interval: 30s` per FR-013 (check every 30 seconds - balances responsiveness and overhead)
+- [X] T023 [US3] Add to health check in `docker-compose.yml`: `timeout: 10s` per FR-013 (allow 10 seconds for response under load)
+- [X] T024 [US3] Add to health check in `docker-compose.yml`: `retries: 3` per FR-013 (3 consecutive failures before marking unhealthy - avoids false positives)
+- [X] T025 [US3] Add to health check in `docker-compose.yml`: `start_period: 10s` per FR-014 (grace period during application initialization)
 
 **Checkpoint**: Container health monitoring is fully functional. Docker automatically tracks container health and can trigger recovery actions.
 
@@ -92,11 +92,11 @@
 
 **Purpose**: Verification, documentation, and final validation of all user stories
 
-- [ ] T026 [P] Verify `docker build -t deus-bank-api .` completes successfully in under 5 minutes per SC-003 (production image build time)
-- [ ] T027 [P] Verify built image size is under 500MB using `docker images deus-bank-api` per SC-002 (expected ~227MB - base:120MB + deps:100MB + app:5MB)
-- [ ] T028 Verify container runs as non-root user: `docker run --rm deus-bank-api whoami` should output "appuser" not "root" (security validation per FR-003)
-- [ ] T029 Verify secrets excluded from image: `docker run --rm deus-bank-api ls /app/.env` should return "No such file or directory" (security validation - .dockerignore working)
-- [ ] T030 Verify tests excluded from image: `docker run --rm deus-bank-api ls /app/tests` should return "No such file or directory" (optimization validation per FR-005)
+- [X] T026 [P] Verify `docker build -t deus-bank-api .` completes successfully in under 5 minutes per SC-003 (production image build time)
+- [X] T027 [P] Verify built image size is under 500MB using `docker images deus-bank-api` per SC-002 (expected ~227MB - base:120MB + deps:100MB + app:5MB)
+- [X] T028 Verify container runs as non-root user: `docker run --rm deus-bank-api whoami` should output "appuser" not "root" (security validation per FR-003)
+- [X] T029 Verify secrets excluded from image: `docker run --rm deus-bank-api ls /app/.env` should return "No such file or directory" (security validation - .dockerignore working)
+- [X] T030 Verify tests excluded from image: `docker run --rm deus-bank-api ls /app/tests` should return "No such file or directory" (optimization validation per FR-005)
 - [ ] T031 Copy `.env.example` to `.env`, add valid `OPENAI_API_KEY`, run `docker compose up` and verify API responds at <http://localhost:8000/health> with {"status":"ok"} in under 2 minutes per SC-001 (local dev workflow validation)
 - [ ] T032 With container running, execute `docker ps` and verify health status shows "healthy" after 40 seconds (10s start_period + 30s first check) per user story 3 acceptance criteria
 - [ ] T033 With container running, send POST request to <http://localhost:8000/chat> with valid ChatRequest body and verify valid ChatResponse returned (end-to-end API validation)
