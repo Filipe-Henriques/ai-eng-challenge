@@ -131,37 +131,18 @@ def route_after_specialist(state: State) -> str:
     """Determine next node after Specialist Agent completes.
 
     Routing Logic:
-        - If conversation_ended=True: Route to END (request fulfilled or max turns reached)
-        - Otherwise: Loop back to same specialist node for multi-turn conversations
+        - Always route to END. Multi-turn specialist conversations are driven by the
+          API layer: each new user message triggers a fresh graph invocation that
+          flows greeter → bouncer → specialist again.
 
     Args:
         state: Current conversation state
 
     Returns:
-        END symbol if conversation should terminate
-        current_agent node name to loop back for multi-turn support
-
-    Examples:
-        >>> # Conversation ended after fulfillment
-        >>> state = {"conversation_ended": True, "current_agent": "specialist_standard"}
-        >>> route_after_specialist(state)
-        END
-
-        >>> # Multi-turn conversation continues
-        >>> state = {"conversation_ended": False, "current_agent": "specialist_premium"}
-        >>> route_after_specialist(state)
-        'specialist_premium'
+        END symbol always
     """
-    conversation_ended = state.get("conversation_ended", False)
-    current_agent = state.get("current_agent", "specialist_standard")
-    
-    if conversation_ended:
-        logger.info("Conversation ended, routing to END")
-        return END
-    
-    # Loop back to same specialist for multi-turn conversation
-    logger.info(f"Continuing multi-turn conversation with {current_agent}")
-    return current_agent
+    logger.info("Specialist done, routing to END")
+    return END
 
 
 def build_graph() -> StateGraph:
@@ -216,26 +197,18 @@ def build_graph() -> StateGraph:
         },
     )
     
-    # Add conditional edges from each specialist node - loop or end
+    # Add conditional edges from each specialist node - always end
     for specialist_node in ["specialist_standard", "specialist_premium", "specialist_vip"]:
         workflow.add_conditional_edges(
             specialist_node,
             route_after_specialist,
-            {specialist_node: specialist_node, END: END},
+            {END: END},
         )
 
-    # Compile graph with interrupt_after for multi-turn conversation pattern
-    graph = workflow.compile(
-        interrupt_after=[
-            "greeter",
-            "bouncer",
-            "specialist_standard",
-            "specialist_premium",
-            "specialist_vip",
-        ]
-    )
+    # Compile graph — no interrupt_after needed; the API session store handles multi-turn
+    graph = workflow.compile()
 
-    logger.info("LangGraph pipeline created successfully with 5 nodes and interrupt support")
+    logger.info("LangGraph pipeline created successfully with 5 nodes")
     return graph
 
 

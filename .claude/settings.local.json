@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose up -d --build)",
+      "Bash(curl -sf http://localhost:8000/health)",
+      "Bash(docker ps --format \"table {{.Names}}\\\\t{{.Status}}\\\\t{{.Ports}}\")",
+      "Bash(python test_api.py)",
+      "Bash(.venvScriptspip install streamlit --quiet)",
+      "Bash(.venv/Scripts/pip install streamlit --quiet)"
+    ]
+  }
+}
