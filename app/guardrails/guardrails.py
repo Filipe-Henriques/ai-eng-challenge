@@ -1,20 +1,23 @@
 """Core guardrails implementation for DEUS Bank AI Support System.
 
-This module provides three independent safety checks:
-1. Toxicity detection - Blocks abusive, threatening, or harassing language
-2. Topic filtering - Ensures queries are banking-related
-3. PII protection - Redacts sensitive information for unauthenticated users
+Three independent safety checks, each with a single responsibility:
 
-Architecture:
-    - Each check is an independent function with a single responsibility
-    - The run_guardrails() orchestrator composes checks with short-circuit evaluation
-    - All checks are stateless and deterministic (given same input + auth state)
-    - Failures are handled with fail-closed behavior (block vs allow unchecked)
+1. check_toxicity(message) → Optional[str]
+   Blocks abusive, threatening, or harassing language.
+   Used by all agents on every incoming message.
 
-Performance:
-    - Target: <200ms average, <500ms p95
-    - Toxicity/Topic: LLM API calls with 5-second timeout
-    - PII: Regex-based, negligible latency (<1ms)
+2. check_pii(response, is_authenticated) → str
+   Redacts phone numbers and IBANs for unauthenticated users.
+   Used by all agents on every outgoing response.
+
+3. check_topic(message) → Optional[str]
+   Ensures queries are banking-related.
+   Used only inside run_guardrails(); not applied during auth flow.
+
+run_guardrails() orchestrates all three checks with short-circuit evaluation
+and returns a GuardrailResult. Primarily used by tests and evaluation pipelines.
+
+All checks are stateless and fail-closed (block on error rather than allow).
 """
 
 import re

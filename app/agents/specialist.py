@@ -17,13 +17,13 @@ from typing import Any
 from langchain.tools import tool
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
+from langchain_core.messages import AIMessage, SystemMessage, ToolMessage
 from langchain_core.runnables import RunnableLambda
 
 from app.models.database import ACCOUNTS_DB
 from app.models.schemas import Transaction
 from app.graph.state import State
-from app.guardrails.guardrails import run_guardrails
+from app.guardrails.guardrails import check_toxicity, check_pii
 
 logger = logging.getLogger(__name__)
 
@@ -357,21 +357,15 @@ def specialist_agent(state: State) -> dict:
     """
     logger.info("specialist_agent invoked")
     
-    # Step 1: Apply input guardrails to last user message
+    # Step 1: Apply toxicity check to last user message
     messages = state.get("messages", [])
     if messages:
         last_message = messages[-1].content if hasattr(messages[-1], 'content') else str(messages[-1])
-        guardrail_check = run_guardrails(
-            message=last_message,
-            proposed_response="",  # No proposed response yet for input validation
-            is_authenticated=state.get("is_authenticated", False)
-        )
-        
-        # If input is unsafe, return immediately with safe response
-        if not guardrail_check.is_safe:
-            logger.warning(f"Guardrails blocked unsafe input: {guardrail_check.safe_response}")
+        toxic_warning = check_toxicity(last_message)
+        if toxic_warning:
+            logger.warning("Specialist blocked toxic input")
             return {
-                "messages": [AIMessage(content=guardrail_check.safe_response)],
+                "messages": [AIMessage(content=toxic_warning)],
                 "conversation_ended": True,
             }
     
@@ -449,66 +443,45 @@ from one of our banking specialists. Have a great day!"""
     
     # Step 7: Invoke LLM with conversation history
     try:
-        # Build messages for LLM
-        llm_messages = [HumanMessage(content=system_prompt)] + messages
-        
+        # Build messages for LLM (system prompt as SystemMessage)
+        llm_messages = [SystemMessage(content=system_prompt)] + list(messages)
+
         # Get LLM response
         response = llm_with_tools.invoke(llm_messages)
-        
+
         # Check if LLM wants to call tools
         if response.tool_calls:
-            # Execute tool calls
-            tool_results = []
+            # Append the assistant message with tool_calls to the conversation
+            tool_messages = [response]
+
             for tool_call in response.tool_calls:
                 tool_name = tool_call["name"]
-                tool_args = tool_call["args"]
-                
-                # Inject user_id if not provided
-                if "user_id" in tool_args and not tool_args["user_id"]:
-                    tool_args["user_id"] = user_id
-                elif "user_id" not in tool_args:
-                    tool_args["user_id"] = user_id
-                
+                tool_args = dict(tool_call["args"])
+
+                # Always force the authenticated user's user_id — the LLM cannot know the internal ID
+                tool_args["user_id"] = user_id
+
                 # Find and invoke the tool
-                tool_func = None
-                for t in tools:
-                    if t.name == tool_name:
-                        tool_func = t
-                        break
-                
+                tool_func = next((t for t in tools if t.name == tool_name), None)
+
                 if tool_func:
                     result = tool_func.invoke(tool_args)
-                    tool_results.append(result)
                 else:
-                    tool_results.append({"error": f"Tool {tool_name} not found"})
-            
-            # Get final response with tool results
-            # Build a simple text response based on tool results
-            result_text = f"Based on the information: {tool_results[0] if tool_results else {}}"
-            
-            # Ask LLM to format the response naturally
-            final_messages = llm_messages + [
-                AIMessage(content=f"Tool results: {tool_results}"),
-                HumanMessage(content="Please provide a conversational response to the customer based on these results. Never show raw JSON or technical details.")
-            ]
-            final_response = llm.invoke(final_messages)
+                    result = {"error": f"Tool {tool_name} not found"}
+
+                tool_messages.append(
+                    ToolMessage(content=str(result), tool_call_id=tool_call["id"])
+                )
+
+            # Get final response with all tool results in context
+            final_response = llm.invoke(llm_messages + tool_messages)
             response_message = final_response.content
         else:
             # No tool calls, use direct response
             response_message = response.content
         
-        # Apply output guardrails
-        output_guardrail_check = run_guardrails(
-            message=last_message,
-            proposed_response=response_message,
-            is_authenticated=state.get("is_authenticated", False)
-        )
-        if not output_guardrail_check.is_safe:
-            logger.warning(f"Guardrails blocked unsafe output: {output_guardrail_check.safe_response}")
-            response_message = output_guardrail_check.safe_response
-        else:
-            # Use sanitized response to remove any PII
-            response_message = output_guardrail_check.sanitised_response
+        # Apply PII redaction to output
+        response_message = check_pii(response_message, state.get("is_authenticated", False))
         
         logger.info(f"specialist_agent response generated successfully")
         

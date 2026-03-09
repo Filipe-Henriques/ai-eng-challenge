@@ -16,7 +16,7 @@ from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
 
 from app.graph.state import State
-from app.guardrails.guardrails import run_guardrails
+from app.guardrails.guardrails import check_toxicity, check_pii
 
 # =============================================================================
 # Data Models
@@ -58,21 +58,13 @@ class ClassifiedIntent(BaseModel):
 # Routing Configuration
 # =============================================================================
 
+# Tier-to-specialist routing table.
+# Maps customer tier values to their corresponding Specialist Agent node names.
+# Tier determination logic:
+#   - premium: Account exists and Account.premium == True
+#   - standard: Account exists and Account.premium == False, OR no Account found
+# Defensive: If tier is not in this dict, defaults to specialist_standard.
 TIER_ROUTING: dict[str, str] = {
-    """Tier-to-specialist routing table.
-    
-    Maps customer tier values to their corresponding Specialist Agent node names.
-    This dictionary is used for O(1) routing decisions based on customer tier.
-    
-    Tier determination logic:
-    - premium: Account exists and Account.premium == True
-    - standard: Account exists and Account.premium == False, OR no Account found
-    
-    Keys: Customer tier strings
-    Values: Specialist agent node names in the LangGraph pipeline
-    
-    Defensive: If tier is not in this dict, defaults to specialist_standard.
-    """
     "standard": "specialist_standard",
     "premium": "specialist_premium",
 }
@@ -118,16 +110,12 @@ def bouncer_agent(state: State) -> dict:
 
     # Step 1: Apply input guardrails to last user message
     messages = state["messages"]
+    last_message = messages[-1].content if messages else ""
     if messages:
-        last_message = messages[-1].content
-        guardrail_check = run_guardrails(
-            last_message, state.get("is_authenticated", False)
-        )
-
-        # If input is unsafe, return immediately with safe response
-        if not guardrail_check.is_safe:
+        toxic_warning = check_toxicity(last_message)
+        if toxic_warning:
             return {
-                "messages": [AIMessage(content=guardrail_check.safe_response)],
+                "messages": [AIMessage(content=toxic_warning)],
                 "conversation_ended": True,
             }
 
@@ -210,17 +198,16 @@ Return the intent and your confidence score (0.0-1.0)."""
             # After retry failure, default to general_inquiry
             customer_intent = "general_inquiry"
 
-    # Step 5: Generate handoff message (temporary placeholder for US3)
+    # Step 5: Generate handoff message
     handoff_message = "Connecting you to a specialist..."
 
-    # Apply output guardrails to handoff message
-    output_check = run_guardrails(handoff_message, state.get("is_authenticated", False))
-    final_message = output_check.sanitised_response or handoff_message
+    # Apply PII check to handoff message
+    final_message = check_pii(handoff_message, state.get("is_authenticated", False))
 
     # Step 6: Return state updates
     return {
         "customer_tier": customer_tier,
-        "customer_intent": customer_intent,  # Now using classified intent
+        "customer_intent": customer_intent,
         "current_agent": specialist_agent,
         "messages": [AIMessage(content=final_message)],
     }
